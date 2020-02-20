@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activites.MainActivity"
+    android:background="@drawable/background"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/txt_name"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/marginLayoutSize"
+                android:background="@drawable/background_edit_text"
+                android:padding="@dimen/paddingSize"
+                android:textSize="@dimen/mediumTextSize"
+                android:drawableEnd="@drawable/ic_logout"
+                android:textColor="@color/md_light_blue_50"
+                android:textColorHint="@color/md_light_blue_50"
+                android:hint="@string/name" />
+
+            <EditText
+                android:id="@+id/txt_user_name"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/marginLayoutSize"
+                android:background="@drawable/background_edit_text"
+                android:padding="@dimen/paddingSize"
+                android:textSize="@dimen/mediumTextSize"
+                android:hint="@string/user_name"
+                android:drawableEnd="@drawable/ic_person"
+                android:textColor="@color/md_light_blue_50"
+                android:textColorHint="@color/md_light_blue_50"/>
+
+            <EditText
+                android:id="@+id/txt_user_email"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/marginLayoutSize"
+                android:background="@drawable/background_edit_text"
+                android:padding="@dimen/paddingSize"
+                android:textSize="@dimen/mediumTextSize"
+                android:hint="@string/user_email"
+                android:drawableEnd="@drawable/ic_email"
+                android:textColor="@color/md_light_blue_50"
+                android:textColorHint="@color/md_light_blue_50"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/txt_user_pass"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/marginLayoutSize"
+                android:background="@drawable/background_edit_text"
+                android:textColor="@color/md_light_blue_50"
+                android:textColorHint="@color/md_light_blue_50"
+                android:drawableEnd="@drawable/ic_lock"
+                android:padding="@dimen/paddingSize"
+                android:textSize="@dimen/mediumTextSize"
+                android:hint="@string/user_pass"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/txt_user_retype_pass"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/marginLayoutSize"
+                android:background="@drawable/background_edit_text"
+                android:padding="@dimen/paddingSize"
+                android:textSize="@dimen/mediumTextSize"
+                android:hint="@string/user_retype_pass"
+                android:drawableEnd="@drawable/ic_lock_outline"
+                android:textColor="@color/md_light_blue_50"
+                android:textColorHint="@color/md_light_blue_50"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/marginLayoutSize"
+                android:textAllCaps="false"
+                android:background="@drawable/background_button"
+                android:text="@string/register"
+                android:textColor="@color/md_light_blue_50"
+                android:textColorHint="@color/md_light_blue_50"/>
+
+            <TextView
+                android:id="@+id/login_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/marginLayoutSize"
+                android:text="@string/already_have_acount"
+                android:textStyle="italic|bold"
+                android:textColor="@color/md_light_blue_900"
+                android:textSize="@dimen/standardTextSize" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

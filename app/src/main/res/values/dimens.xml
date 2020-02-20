@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="marginTopSize">5dp</dimen>
+    <dimen name="marginBottomSize">5dp</dimen>
+    <dimen name="marginRightSize">15dp</dimen>
+    <dimen name="marginLeftSize">15dp</dimen>
+    <dimen name="marginLayoutSize">20dp</dimen>
+
+    <dimen name="paddingSize">10dp</dimen>
+
+    <dimen name="smallTextSize">12sp</dimen>
+    <dimen name="mediumTextSize">14sp</dimen>
+    <dimen name="standardTextSize">16sp</dimen>
+    <dimen name="bigTextSize">18sp</dimen>
+
+    <dimen name="starIconSize">20dp</dimen>
+    <dimen name="starIconsMarginSize">5dp</dimen>
+
+    <dimen name="standardHeightSize">30dp</dimen>
+
+
+</resources>
