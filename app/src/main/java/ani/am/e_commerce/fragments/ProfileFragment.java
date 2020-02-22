@@ -2,6 +2,7 @@ package ani.am.e_commerce.fragments;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,14 +27,10 @@ import ani.am.e_commerce.view_models.UserViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static ani.am.e_commerce.activites.MainActivity.prefConfig;
 
 public class ProfileFragment extends Fragment {
     private View view;
+    private Context context;
     private UserCategoryAdapter adapter;
     List<Category> categoryList;
 
@@ -50,6 +47,12 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.configureDagger();
@@ -63,7 +66,7 @@ public class ProfileFragment extends Fragment {
     private void configureViewModel() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel.class);
         userViewModel = ViewModelProviders.of(this,viewModelFactory).get(UserViewModel.class);
-        userViewModel.initSession();
+        userViewModel.initSession(context);
         getCategoryList();
     }
 
@@ -87,37 +90,6 @@ public class ProfileFragment extends Fragment {
         ButterKnife.bind(this, view);
         //  getCategories();
         return view;
-    }
-  /*  private void getCategories(){
-        Global.showProgressDialog(getContext());
-        String token = prefConfig.readToken("token");
-        String id = prefConfig.readToken("id");
-        Call<UserCategoryResponse> call = MainActivity.apiInterface.getCategories(token,id);
-        call.enqueue(new Callback<UserCategoryResponse>() {
-            @Override
-            public void onResponse(Call<UserCategoryResponse> call, Response<UserCategoryResponse> response) {
-                Log.d("Tag","" + response.body());
-                if(response.body() != null)
-                createArrayList(response.body().getUserCategory());
-                Global.hideProgressDialog(getContext());
-
-            }
-            @Override
-            public void onFailure(Call<UserCategoryResponse> call, Throwable t) {
-                Global.hideProgressDialog(getContext());
-                categoryList = prefConfig.getCategoriesList("userCategory");
-                createArrayListWithoutInternet(categoryList);
-                Toast.makeText(getContext(),getString(R.string.check_internet), Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }*/
-
-    private void createArrayListWithoutInternet(List<Category> categoryList) {
-        RecyclerView rv = view.findViewById(R.id.category_rv);
-        adapter = new UserCategoryAdapter(prefConfig.getCategoriesList("userCategory"));
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
     }
 
     private void createArrayList(List<Category> list) {

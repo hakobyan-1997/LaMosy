@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.yalantis.ucrop.UCrop;
 
@@ -38,21 +37,11 @@ import javax.inject.Inject;
 import ani.am.e_commerce.Constants;
 import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.api.ApiClient;
-import ani.am.e_commerce.api.ApiInterface;
-import ani.am.e_commerce.db.entity.ProductResponse;
-import ani.am.e_commerce.view_models.CategoryViewModel;
 import ani.am.e_commerce.view_models.ProductViewModel;
 import dagger.android.support.AndroidSupportInjection;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-
-import static ani.am.e_commerce.activites.MainActivity.prefConfig;
 
 public class AddProductFragment extends Fragment implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
     private EditText nameEt, priceEt, sizeEt, descriptionEt;
@@ -136,15 +125,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         String filePath = Global.getRealPathFromURIPath(uri, getActivity());
         File file = new File(filePath);
         RequestBody mFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
-       // Global.showProgressDialog(getContext());
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), nameEt.getText().toString());
         RequestBody price = RequestBody.create(MediaType.parse("text/plain"), priceEt.getText().toString());
         RequestBody size = RequestBody.create(MediaType.parse("text/plain"), sizeEt.getText().toString());
         RequestBody description = RequestBody.create(MediaType.parse("text/plain"), descriptionEt.getText().toString());
-        Retrofit retrofit = ApiClient.getApiClient();
-        ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-        String token = prefConfig.readToken("token");
-
         Map<String, RequestBody> map = new HashMap<>();
         map.put("picture\"; filename=\"" + file.getName() + "\"", mFile);
         map.put("name", name);
@@ -154,29 +138,6 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         map.put("description", description);
         Log.d("Tag",categoryId+" "+ size+ " "+ price+" " +name);
         productViewModel.addProduct(categoryId,map);
-
-        /*Call<ProductResponse> call = apiInterface.createProduct(categoryId, token, map);
-        call.enqueue(new Callback<ProductResponse>() {
-            @Override
-            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
-                if (response.isSuccessful()) {
-                    Log.d("Tag", response.body().getMessage());
-                    Toast.makeText(getContext(), "Success " + response.body().getSuccess(), Toast.LENGTH_LONG).show();
-
-                } else {
-                    Log.d("Tag", response.message());
-
-                }
-                Global.hideProgressDialog(getContext());
-            }
-
-            @Override
-            public void onFailure(Call<ProductResponse> call, Throwable t) {
-                Log.d("Tag", "Error " + t.getLocalizedMessage());
-                Global.hideProgressDialog(getContext());
-                Toast.makeText(getContext(), getString(R.string.check_internet), Toast.LENGTH_LONG).show();
-            }
-        });*/
     }
 
     private void openCropActivity(Uri sourceUri, Uri destinationUri) {

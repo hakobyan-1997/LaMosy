@@ -1,40 +1,52 @@
 package ani.am.e_commerce.fragments;
+
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import javax.inject.Inject;
 
 import ani.am.e_commerce.activites.MainActivity;
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.db.entity.LoginResponse;
 import ani.am.e_commerce.db.entity.User;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import ani.am.e_commerce.view_models.UserViewModel;
+import dagger.android.support.AndroidSupportInjection;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
     OnLoginFormActivityListener loginFormActivityListener;
+    private Context context;
     private EditText userName, userPassword;
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+    private UserViewModel userViewModel;
 
-    public  interface OnLoginFormActivityListener{
+    public interface OnLoginFormActivityListener {
         public void performRegister();
-        public void performLogin(String name, String token, String id);
     }
 
     public LoginFragment() {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        AndroidSupportInjection.inject(this);
+        userViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserViewModel.class);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
         init(view);
         return view;
     }
@@ -50,7 +62,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.register_txt:
                 loginFormActivityListener.performRegister();
                 break;
@@ -59,49 +71,31 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        this.context = context;
         Activity activity = (Activity) context;
         loginFormActivityListener = (OnLoginFormActivityListener) activity;
     }
-    private void performLogin(){
+
+    private void performLogin() {
         String username = userName.getText().toString();
         String userpassword = userPassword.getText().toString();
-        User user = new User(username,userpassword);
-        Call<LoginResponse> call = MainActivity.apiInterface.performUserLogin(user);
-        call.enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (response.isSuccessful()){
-                    String name = response.body().getUser().getName();
-                    String token = response.body().getUser().getToken();
-                    String id = response.body().getUser().getId();
-                    loginFormActivityListener.performLogin(name,token,id);
-                    MainActivity.prefConfig.writeLoginStatus(true);
-                    userName.setText("");
-                    userPassword.setText("");
-                }else
-                MainActivity.prefConfig.displayToast(getString(R.string.try_again));
-            }
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Log.d("Tag",t.getMessage());
-                Toast.makeText(getContext(),getString(R.string.check_internet), Toast.LENGTH_LONG).show();
-            }
-        });
-
+        User user = new User(username, userpassword);
+        userViewModel.login(context, user);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ((MainActivity)getActivity()).getSupportActionBar().show();
+        ((MainActivity) getActivity()).getSupportActionBar().show();
     }
 }

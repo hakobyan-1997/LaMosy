@@ -58,6 +58,8 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     private Intent recognizerIntent;
     private ProgressBar progressBar;
 
+    private List<Category> categoryList;
+
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
@@ -97,6 +99,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         Log.d("Tag", "allcategorieslist  update " + categoryList.size());
         if (categoryList != null) {
             createArrayList(categoryList);
+            this.categoryList = categoryList;
         }
     }
 
@@ -130,8 +133,10 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Log.d("Tag", "Search yes I am win :D");
+                Log.d("Tag", "Search : " + s);
                 Global.hideKeyboard(getActivity());
+                /*if (!s.isEmpty())
+                    searchCategoryByName(s);*/
                 return false;
             }
 
@@ -176,6 +181,12 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
     }
 
+    private void searchCategoryByName(String s) {
+        for(Category category: categoryList){
+            //if(category.getCategoryName())
+        }
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -184,19 +195,23 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
             Log.d("Tag", "destroy");
         }
     }
+
     @Override
     public void onBeginningOfSpeech() {
         Log.d("Tag", "onBeginningOfSpeech");
     }
+
     @Override
     public void onBufferReceived(byte[] buffer) {
         Log.d("Tag", "onBufferReceived: " + buffer);
     }
+
     @Override
     public void onEndOfSpeech() {
         Log.d("Tag", "onEndOfSpeech");
         speech.stopListening();
     }
+
     @Override
     public void onError(int errorCode) {
         progressBar.setVisibility(View.INVISIBLE);
@@ -205,18 +220,22 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         errorTv.setVisibility(View.VISIBLE);
         errorTv.setText(errorMessage);
     }
+
     @Override
     public void onEvent(int arg0, Bundle arg1) {
         Log.d("Tag", "onEvent");
     }
+
     @Override
     public void onPartialResults(Bundle arg0) {
         Log.d("Tag", "onPartialResults");
     }
+
     @Override
     public void onReadyForSpeech(Bundle arg0) {
         Log.d("Tag", "onReadyForSpeech");
     }
+
     @Override
     public void onResults(Bundle results) {
         Log.d("Tag", "onResults");
@@ -229,11 +248,13 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         searchView.setQuery(text, true);
         progressBar.setVisibility(View.INVISIBLE);
     }
+
     @Override
     public void onRmsChanged(float rmsdB) {
         progressBar.setVisibility(View.VISIBLE);
         Log.d("Tag", "onRmsChanged: " + rmsdB);
     }
+
     public static String getErrorText(int errorCode) {
         String message;
         switch (errorCode) {

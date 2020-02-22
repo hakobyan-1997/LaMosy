@@ -3,9 +3,7 @@ package ani.am.e_commerce.api;
 import com.google.gson.JsonObject;
 
 import java.util.Map;
-import ani.am.e_commerce.db.entity.CategoryResponse;
-import ani.am.e_commerce.db.entity.LoginResponse;
-import ani.am.e_commerce.db.entity.ProductResponse;
+
 import ani.am.e_commerce.db.entity.User;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -23,14 +21,14 @@ import retrofit2.http.Path;
 public interface ApiInterface {
 
     @POST("/auth/register")
-    Call<LoginResponse> performRegistration(@Body User user);
+    Call<JsonObject> performRegistration(@Body User user);
 
     @Headers({"Content-Type: application/json"})
     @POST("/auth/login")
-    Call<LoginResponse> performUserLogin(@Body User user);
+    Call<JsonObject> performUserLogin(@Body User user);
 
     @POST("/auth/logout")
-    Call<LoginResponse> performUserLogOut(@Header("x-access-token")String token);
+    Call<JsonObject> performUserLogOut(@Header("x-access-token")String token);
 
     @POST("/auth/init-session")
     Call<JsonObject> initSession(@Header("x-access-token")String token);

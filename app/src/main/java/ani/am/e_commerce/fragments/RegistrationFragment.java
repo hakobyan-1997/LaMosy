@@ -1,8 +1,10 @@
 package ani.am.e_commerce.fragments;
 
-import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,27 +12,32 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+import javax.inject.Inject;
 
 import ani.am.e_commerce.activites.MainActivity;
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.db.entity.LoginResponse;
 import ani.am.e_commerce.db.entity.User;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import ani.am.e_commerce.view_models.UserViewModel;
+import dagger.android.support.AndroidSupportInjection;
 
 public class RegistrationFragment extends Fragment {
     private EditText name,userName,userEmail, userPassword, userRetypePassword;
     private Button btnRegister;
+    private Context context;
 
-    OnRegisterListener onRegisterListener;
-    public interface  OnRegisterListener{
-        public void registerPerformed(String name, String token, String id);
-    }
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+    private UserViewModel userViewModel;
 
     public RegistrationFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        AndroidSupportInjection.inject(this);
+        userViewModel = ViewModelProviders.of(this,viewModelFactory).get(UserViewModel.class);
     }
 
     @Override
@@ -65,30 +72,7 @@ public class RegistrationFragment extends Fragment {
         String email = userEmail.getText().toString();
         if(checkInputData(n,username,email,password,retypepassword)) {
             User user = new User(n, username, email, password);
-            Call<LoginResponse> call = MainActivity.apiInterface.performRegistration(user);
-            call.enqueue(new Callback<LoginResponse>() {
-                @Override
-                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                    if (response.isSuccessful()) {
-                        MainActivity.prefConfig.displayToast(response.message());
-                        String name = response.body().getUser().getName();
-                        String token = response.body().getUser().getToken();
-                        String id = response.body().getUser().getId();
-                        onRegisterListener.registerPerformed(name, token, id);
-                        MainActivity.prefConfig.writeLoginStatus(true);
-                    } else
-                        MainActivity.prefConfig.displayToast(getString(R.string.something_went_wrong));
-                }
-                @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    Toast.makeText(getContext(),getString(R.string.check_internet), Toast.LENGTH_LONG).show();
-                }
-            });
-            name.setText("");
-            userName.setText("");
-            userEmail.setText("");
-            userPassword.setText("");
-            userRetypePassword.setText("");
+            userViewModel.registration(context,user);
         }
     }
 
@@ -116,7 +100,6 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Activity activity = (Activity)context;
-        onRegisterListener = (OnRegisterListener) activity;
+        this.context = context;
     }
 }

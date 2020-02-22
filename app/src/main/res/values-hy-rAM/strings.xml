@@ -19,10 +19,10 @@
     <string name="name">Անուն</string>
     <string name="register">Գրանցում</string>
 
-    <string name="something_went_wrong">Ինչ որ բան այնպես չէ...</string>
-    <string name="try_again">Կրկին փորձեք...</string>
-    <string name="complete_all_fields">Լրացրեք բոլոր դաշտերը...</string>
-    <string name="invalid_email_address">Սխալ էլ-հասցե...</string>
+    <string name="something_went_wrong">Ինչ որ բան այնպես չէ․․․</string>
+    <string name="try_again">Կրկին փորձեք․․․</string>
+    <string name="complete_all_fields">Լրացրեք բոլոր դաշտերը․․․</string>
+    <string name="invalid_email_address">Սխալ էլ-հասցե․․․</string>
 
     <string name="my_profile">Իմ էջը</string>
     <string name="settings">Կարգավորումներ</string>
@@ -36,7 +36,8 @@
 
     <string name="read_file">Այս հավելվածը պետք է մուտք ունենա ձեր լուսանկարների պահոց</string>
     <string name="check_internet">Խնդրում ենք ստուգել ձեր ինտերնետ կապը</string>
-    <string name="loading">Բեռնվում է...</string>
+    <string name="logout_failed">Դուրս գալը ձախողվեց: Խնդրում ենք փորձել կրկին ․․․</string>
+    <string name="loading">Բեռնվում է․․․</string>
     <string name="delete">Ջնջել</string>
     <string name="edit">Խմբագրել</string>
 
