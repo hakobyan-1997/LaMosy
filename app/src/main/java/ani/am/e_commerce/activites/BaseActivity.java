@@ -1,7 +1,8 @@
 package ani.am.e_commerce.activites;
+
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import ani.am.e_commerce.R;
 import ani.am.e_commerce.fragments.AddCategoryFragment;
 import ani.am.e_commerce.fragments.ProfileFragment;
 import ani.am.e_commerce.fragments.SettingsFragment;
+import ani.am.e_commerce.interfaces.UpdatePageInterfase;
 import ani.am.e_commerce.view_models.UserViewModel;
 import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
@@ -26,7 +28,7 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 import static ani.am.e_commerce.activites.MainActivity.prefConfig;
 
-public class BaseActivity extends AppCompatActivity implements HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener {
+public class BaseActivity extends AppCompatActivity implements UpdatePageInterfase, HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener {
     private ActionBarDrawerToggle action;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -41,14 +43,15 @@ public class BaseActivity extends AppCompatActivity implements HasSupportFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         this.configureDagger();
-        userViewModel = ViewModelProviders.of(this,viewModelFactory).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserViewModel.class);
         init();
-        if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
             navigationView.setCheckedItem(R.id.profile);
         }
     }
-    private void configureDagger(){
+
+    private void configureDagger() {
         AndroidInjection.inject(this);
     }
 
@@ -56,10 +59,10 @@ public class BaseActivity extends AppCompatActivity implements HasSupportFragmen
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
-        action = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
+        action = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(action);
         action.syncState();
-        navigationView  = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -70,15 +73,15 @@ public class BaseActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new ProfileFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
                 break;
             case R.id.settings:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new SettingsFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).addToBackStack(null).commit();
                 break;
             case R.id.addCategory:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new AddCategoryFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddCategoryFragment()).addToBackStack(null).commit();
                 break;
             case R.id.logout:
                 performedLogOut();
@@ -90,27 +93,24 @@ public class BaseActivity extends AppCompatActivity implements HasSupportFragmen
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START))
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
     }
-    private void performedLogOut(){
-        String token = prefConfig.readToken("token");
-        userViewModel.logout(this,token);
-    }
-    public void logoutPerformed() {
-        prefConfig.writeLoginStatus(false);
-        prefConfig.writeName("User");
-        prefConfig.writeToken("","token");
-        prefConfig.writeToken("","id");
-        startActivity(new Intent(this,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-        finish();
-    }
 
+    private void performedLogOut() {
+        String token = prefConfig.readToken("token");
+        userViewModel.logout(this, token);
+    }
 
     @Override
     public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
+    }
+
+    @Override
+    public void updatePage(Context context) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
     }
 }

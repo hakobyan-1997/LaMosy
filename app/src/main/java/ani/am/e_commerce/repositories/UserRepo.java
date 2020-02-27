@@ -47,7 +47,7 @@ public class UserRepo {
                             String json = response.body().toString();
                             Log.d("Tag", "init Session json " + json);
                             if (json != null)
-                                saveUserData(context,json);
+                                saveUserData(context, json);
                         } else
                             prefConfig.displayToast(context.getString(R.string.something_went_wrong));
                     }
@@ -70,7 +70,7 @@ public class UserRepo {
                             String json = response.body().toString();
                             Log.d("Tag", "init Session json " + json);
                             if (json != null)
-                                saveUserData(context,json);
+                                saveUserData(context, json);
                         } else
                             prefConfig.displayToast(context.getString(R.string.something_went_wrong));
                     }
@@ -91,41 +91,41 @@ public class UserRepo {
                             String json = response.body().toString();
                             Log.d("Tag", "init Session json " + json);
                             if (json != null)
-                                saveUserData(context,json);
+                                saveUserData(context, json);
                         } else
                             prefConfig.displayToast(context.getString(R.string.something_went_wrong));
                     }
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        Toast.makeText(context,context.getString(R.string.check_internet), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_LONG).show();
                     }
                 }));
     }
 
-    public void logout(Context context, String token){
-        executor.execute(()->
+    public void logout(Context context, String token) {
+        executor.execute(() ->
                 apiInterface.performUserLogOut(token).enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        if (response.isSuccessful()){
+                        if (response.isSuccessful()) {
                             prefConfig.writeLoginStatus(false);
                             prefConfig.writeName("User");
-                            prefConfig.writeToken("","token");
-                            prefConfig.writeToken("","id");
-                            context.startActivity(new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        }else
+                            prefConfig.writeToken("", "token");
+                            prefConfig.writeToken("", "id");
+                            context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                        } else
                             prefConfig.displayToast(context.getString(R.string.logout_failed));
                     }
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        Toast.makeText(context,context.getString(R.string.check_internet), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_LONG).show();
                     }
                 }));
     }
 
-    private void saveUserData(Context context,String json) {
+    private void saveUserData(Context context, String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONObject data = jsonObject.getJSONObject("data");
@@ -133,10 +133,10 @@ public class UserRepo {
             String id = data.getString("userId");
             String name = data.getString("name");
             prefConfig.writeName(name);
-            prefConfig.writeToken(token,"token");
-            prefConfig.writeToken(id,"id");
-            Intent intent  = new Intent(context, BaseActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            prefConfig.writeToken(token, "token");
+            prefConfig.writeToken(id, "id");
+            Intent intent = new Intent(context, BaseActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
             MainActivity.prefConfig.writeLoginStatus(true);
         } catch (JSONException e) {

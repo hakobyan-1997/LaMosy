@@ -22,6 +22,7 @@
     <string name="something_went_wrong">Ինչ որ բան այնպես չէ․․․</string>
     <string name="try_again">Կրկին փորձեք․․․</string>
     <string name="complete_all_fields">Լրացրեք բոլոր դաշտերը․․․</string>
+    <string name="change_fields">Փոփոխել դաշտերը․․․</string>
     <string name="invalid_email_address">Սխալ էլ-հասցե․․․</string>
 
     <string name="my_profile">Իմ էջը</string>
@@ -39,10 +40,11 @@
     <string name="logout_failed">Դուրս գալը ձախողվեց: Խնդրում ենք փորձել կրկին ․․․</string>
     <string name="loading">Բեռնվում է․․․</string>
     <string name="delete">Ջնջել</string>
+    <string name="delete_msg">Համոզվա՞ծ եք, որ ցանկանում եք ջնջել:</string>
     <string name="edit">Խմբագրել</string>
 
     <string name="products">Ապրանքներ</string>
-    <string name="empty_string">Տարրր չկան</string>
+    <string name="empty_string">Տարրեր չկան</string>
     <string name="addProduct">Ավելացնել Ապրանք</string>
     <string name="product_name">Ապրանքի անվանումը</string>
     <string name="price">Գինը</string>
@@ -54,4 +56,7 @@
 
     <string name="hint">Սեղմեք և խոսեք</string>
     <string name="search_text">Բարև Ձեզ։ Ի՞նչ եք ցանկանում որոնել։</string>
+    <string name="dark_mode">Մութ ռեժիմ</string>
+    <string name="language">Լեզու</string>
+    <string name="app_version">Հավելվածի տարբերակը : %1$s</string>
 </resources>

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +18,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,17 +52,16 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
     private ImageView categoryImageView;
     private Uri uri;
     private Button add;
+    private Context context;
     @Inject
     ViewModelProvider.Factory viewModelProvider;
     CategoryViewModel categoryViewModel;
-    public AddCategoryFragment() {
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         AndroidSupportInjection.inject(this);
-        categoryViewModel = ViewModelProviders.of(this,viewModelProvider).get(CategoryViewModel.class);
+        categoryViewModel = ViewModelProviders.of(this, viewModelProvider).get(CategoryViewModel.class);
     }
 
     @Override
@@ -83,19 +85,22 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.image:
                 choosePhoto();
                 break;
             case R.id.add_btn:
-                if (categoryName != null)
-                    addCategory();
-                else
-                    Toast.makeText(getContext(), getString(R.string.complete_all_fields), Toast.LENGTH_LONG).show();
+                addCategory();
                 break;
             case R.id.cancel_btn:
-                ((BaseActivity)getActivity()).onBackPressed();
+                ((BaseActivity) getActivity()).onBackPressed();
                 break;
         }
     }
@@ -107,6 +112,10 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
     }
 
     private void addCategory() {
+        if (!verifyFields()) {
+            Toast.makeText(context, context.getString(R.string.complete_all_fields), Toast.LENGTH_SHORT).show();
+            return;
+        }
         String filePath = Global.getRealPathFromURIPath(uri, getActivity());
         File file = new File(filePath);
         RequestBody mFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
@@ -115,7 +124,7 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
         map.put("categoryPicture\"; filename=\"" + file.getName() + "\"", mFile);
         map.put("categoryName", name);
         categoryViewModel.addCategory(map);
-        ((BaseActivity)getActivity()).onBackPressed();
+        ((BaseActivity) getActivity()).onBackPressed();
     }
 
     private void openCropActivity(Uri sourceUri, Uri destinationUri) {
@@ -167,6 +176,20 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
             Uri uri = UCrop.getOutput(data);
             showImage(uri);
         }
+    }
+
+    private boolean verifyFields() {
+        Animation animShake = AnimationUtils.loadAnimation(context, R.anim.shake);
+        boolean isFilledAllFields = true;
+        if (uri == null) {
+            isFilledAllFields = false;
+            categoryImageView.startAnimation(animShake);
+        }
+        if (categoryName.getText().toString().isEmpty()) {
+            isFilledAllFields = false;
+            categoryName.startAnimation(animShake);
+        }
+        return isFilledAllFields;
     }
 
     private void showImage(Uri imageUri) {

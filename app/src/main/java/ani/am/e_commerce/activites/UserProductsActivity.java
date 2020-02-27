@@ -3,6 +3,7 @@ package ani.am.e_commerce.activites;
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 
@@ -14,6 +15,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.google.gson.Gson;
 
@@ -41,26 +44,23 @@ import dagger.android.HasActivityInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 public class UserProductsActivity extends AppCompatActivity implements HasSupportFragmentInjector {
-
     private PrefConfig prefConfig;
+    private UserProductAdapter adapter;
     private Category category;
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
-     @Inject
-     ViewModelProvider.Factory viewModelFactory;
-     ProductViewModel productViewModel;
-    /* CategoryViewModel categoryViewModel;
-     @Inject
-     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
-*/
-     @BindView(R.id.productsRv)
-     RecyclerView productsRv;
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+    ProductViewModel productViewModel;
+    @BindView(R.id.productsRv)
+    RecyclerView productsRv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_products);
         AndroidInjection.inject(this);
-        productViewModel = ViewModelProviders.of(this,viewModelFactory).get(ProductViewModel.class);
+        productViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
         ButterKnife.bind(this);
         prefConfig = new PrefConfig(this);
         FloatingActionButton addProductButton = (FloatingActionButton) findViewById(R.id.add_product);
@@ -81,9 +81,18 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
         else
             findViewById(R.id.empty_string).setVisibility(View.GONE);
 
-        UserProductAdapter adapter = new UserProductAdapter(products);
+        adapter = new UserProductAdapter(products);
         productsRv.setAdapter(adapter);
         productsRv.setLayoutManager(new LinearLayoutManager(this));
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation);
+        productsRv.setLayoutAnimation(animation);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
     }
 
     private List<Product> getProductsList(String categoryId) {
@@ -97,12 +106,6 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
         return null;
     }
 
-   /* private void runAnimation() {
-        UserProductAdapter adapter = new UserProductAdapter(productslist);
-        productsRv.setAdapter(adapter);
-        productsRv.setLayoutManager(new LinearLayoutManager(this));
-    }*/
-
     private void openAddProductFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -114,12 +117,14 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
     @Override
     public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
     }
 
-   public void deleteProduct(Product product){
+    public void deleteProduct(Product product) {
         productViewModel.deleteProduct(product);
+        adapter.notifyDataSetChanged();
     }
 }

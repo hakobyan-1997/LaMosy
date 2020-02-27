@@ -1,8 +1,8 @@
 package ani.am.e_commerce.fragments;
 
-
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,9 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -42,6 +45,7 @@ public class EditCategoryFragment extends Fragment implements View.OnClickListen
     private ImageView categoryImageView;
     private Uri uri;
     private Category category;
+    private Context context;
 
     public EditCategoryFragment newInstance(String json) {
         Bundle bundle = new Bundle();
@@ -89,7 +93,12 @@ public class EditCategoryFragment extends Fragment implements View.OnClickListen
         }
         uri = Uri.parse("http://5.9.1.58:3000/" + category.getCategoryPicture());
         Log.d("Tag", "Uri " + uri);
+    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
     }
 
     @Override
@@ -135,16 +144,36 @@ public class EditCategoryFragment extends Fragment implements View.OnClickListen
     }
 
     private void editCategory() {
+        if (!verifyFields()) {
+            Toast.makeText(context, context.getString(R.string.change_fields), Toast.LENGTH_SHORT).show();
+            return;
+        }
         String filePath = getRealPathFromURIPath(uri, getActivity());
         File file = new File(filePath);
         RequestBody mFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), categoryName.getText().toString());
-         String id = category.getId();
+        String id = category.getId();
         Map<String, RequestBody> map = new HashMap<>();
         map.put("categoryPicture\"; filename=\"" + file.getName() + "\"", mFile);
         Log.d("Tag", "categoryPicture\"; filename=\"" + file.getName() + "\"");
         map.put("categoryName", name);
-        Global.categoryViewModel.updateCategory(id,map);
+        if (Global.categoryViewModel != null)
+            Global.categoryViewModel.updateCategory(id, map);
+        getActivity().onBackPressed();
+    }
+
+    private boolean verifyFields() {
+        Animation animShake = AnimationUtils.loadAnimation(context, R.anim.shake);
+        boolean isFilledAllFields = true;
+        if (uri == null) {
+            isFilledAllFields = false;
+            categoryImageView.startAnimation(animShake);
+        }
+        if (categoryName.getText().toString().isEmpty()) {
+            isFilledAllFields = false;
+            categoryName.startAnimation(animShake);
+        }
+        return isFilledAllFields;
     }
 
     private void choosePhoto() {

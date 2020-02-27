@@ -24,15 +24,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.intellij.lang.annotations.Language;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -135,13 +138,19 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
             public boolean onQueryTextSubmit(String s) {
                 Log.d("Tag", "Search : " + s);
                 Global.hideKeyboard(getActivity());
-                /*if (!s.isEmpty())
-                    searchCategoryByName(s);*/
+                if (!s.isEmpty())
+                    searchCategoryByName(s);
+                else
+                    createArrayList(categoryList);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                if (!s.isEmpty())
+                    searchCategoryByName(s);
+                else
+                    createArrayList(categoryList);
                 return false;
             }
         });
@@ -153,7 +162,9 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         speech = SpeechRecognizer.createSpeechRecognizer(context);
         speech.setRecognitionListener(this);
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, Locale.getDefault());
+        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, Locale.getDefault());
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "hy");
+        //recognizerIntent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{"hy"});
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
 
@@ -179,13 +190,30 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         CategoryAdapter adapter = new CategoryAdapter(list);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation);
+        rv.setLayoutAnimation(animation);
     }
 
     private void searchCategoryByName(String s) {
-        for(Category category: categoryList){
-            //if(category.getCategoryName())
+        translate(s);
+        List<Category> newList = new ArrayList<>();
+        String searchableString = s.toLowerCase();
+        String categoryName;
+        for (Category category : categoryList) {
+            categoryName = category.getCategoryName().toLowerCase();
+            if (searchableString.contains(categoryName) || categoryName.contains(searchableString)) {
+                newList.add(category);
+            }
         }
+        Log.d("Tag", "newList " + newList);
+        createArrayList(newList);
     }
+
+
+    public void translate(String text) {
+    }
+
 
     @Override
     public void onStop() {

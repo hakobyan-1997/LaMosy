@@ -13,12 +13,16 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.google.gson.Gson;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.adapters.UserCategoryAdapter;
 import ani.am.e_commerce.db.entity.Category;
@@ -36,15 +40,10 @@ public class ProfileFragment extends Fragment {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
-    private CategoryViewModel viewModel;
     private UserViewModel userViewModel;
 
     @BindView(R.id.category_rv)
     RecyclerView categoryRv;
-
-    public ProfileFragment() {
-
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -64,14 +63,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private void configureViewModel() {
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel.class);
-        userViewModel = ViewModelProviders.of(this,viewModelFactory).get(UserViewModel.class);
+        Global.categoryViewModel = ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel.class);
+        userViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserViewModel.class);
         userViewModel.initSession(context);
         getCategoryList();
     }
 
     private void getCategoryList() {
-        viewModel.getUserCategoriesList().observe(this, categories -> updateUI(categories));
+        Global.categoryViewModel.getUserCategoriesList().observe(this, categories -> updateUI(categories));
     }
 
 
@@ -97,6 +96,8 @@ public class ProfileFragment extends Fragment {
         adapter = new UserCategoryAdapter(list);
         categoryRv.setAdapter(adapter);
         categoryRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation);
+        categoryRv.setLayoutAnimation(animation);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class ProfileFragment extends Fragment {
         Log.d("Tag", "position " + position);
         Log.d("Tag", "categoryList size " + categoryList.size());
         Category category = categoryList.get(position);
-        viewModel.deleteCategory(category);
+        Global.categoryViewModel.deleteCategory(category);
         getCategoryList();
     }
 }

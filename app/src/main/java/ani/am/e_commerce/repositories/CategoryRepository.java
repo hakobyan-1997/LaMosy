@@ -62,8 +62,9 @@ public class CategoryRepository {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.d("Tag", response.toString());
-                        if(response.body() != null)
-                        Log.d("Tag", response.body().toString());
+                        if(response.body() != null) {
+                            Log.d("Tag", response.body().toString());
+                        }
 
                     }
 

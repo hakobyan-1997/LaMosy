@@ -1,5 +1,6 @@
 package ani.am.e_commerce.adapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -80,7 +83,9 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         }
         setStarsColorFilter(position);
 
-        viewHolder.delete.setOnClickListener(v -> deleteProdut(product));
+        viewHolder.delete.setOnClickListener(v -> {
+            showDeleteDialog(product,position);
+        });
     }
 
     private void setStarsColorFilter(int position) {
@@ -91,6 +96,35 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         for (int i = 0; i < productStars; i++) {
             viewHolder.stars[i].setColorFilter(ContextCompat.getColor(context,R.color.md_yellow_700), PorterDuff.Mode.SRC_IN);
         }
+    }
+
+    private void showDeleteDialog(Product product, int position){
+        final Dialog dialog = new Dialog(context, R.style.DialogTheme);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_layout);
+
+        TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
+        text.setText(context.getString(R.string.delete_msg));
+
+        Button cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        Button ok = (Button) dialog.findViewById(R.id.btn_ok);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteProdut(product);
+                productsList.remove(position);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void deleteProdut(Product product){

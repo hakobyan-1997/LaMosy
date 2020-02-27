@@ -22,6 +22,7 @@
     <string name="something_went_wrong">Something went wrong...</string>
     <string name="try_again">Try again...</string>
     <string name="complete_all_fields">Complete all fields...</string>
+    <string name="change_fields">Change fields...</string>
     <string name="invalid_email_address">Invalid email address...</string>
 
     <string name="my_profile">My Profile</string>
@@ -39,6 +40,7 @@
     <string name="logout_failed">LogOut Failed..Please try again...</string>
     <string name="loading">Loading...</string>
     <string name="delete">Delete</string>
+    <string name="delete_msg">Are you sure you want to delete?</string>
     <string name="edit">Edit</string>
     <string name="products">Products</string>
     <string name="empty_string">No Items Available</string>
@@ -53,4 +55,7 @@
 
     <string name="hint">Tap on mic to start</string>
     <string name="search_text">Hello, What do you want to search?</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="language">Language</string>
+    <string name="app_version">App version : %1$s</string>
 </resources>

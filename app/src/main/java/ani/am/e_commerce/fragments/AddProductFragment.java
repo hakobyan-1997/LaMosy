@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,9 +20,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.yalantis.ucrop.UCrop;
 
@@ -50,6 +54,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     private View view;
     private Uri uri;
     private String categoryId;
+    private Context context;
+
     @Inject
     ViewModelProvider.Factory viewModelProvider;
     ProductViewModel productViewModel;
@@ -60,8 +66,8 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        AndroidSupportInjection.inject(this );
-        productViewModel = ViewModelProviders.of(this,viewModelProvider).get(ProductViewModel.class);
+        AndroidSupportInjection.inject(this);
+        productViewModel = ViewModelProviders.of(this, viewModelProvider).get(ProductViewModel.class);
     }
 
     public static Fragment newInstance(String categoryId) {
@@ -102,6 +108,12 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.product_image_view:
@@ -111,6 +123,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 addProduct();
                 break;
             case R.id.cancel_btn:
+                getActivity().onBackPressed();
                 break;
         }
     }
@@ -122,6 +135,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
     }
 
     private void addProduct() {
+        if (!verifyFields()) {
+            Toast.makeText(context, context.getString(R.string.complete_all_fields), Toast.LENGTH_SHORT).show();
+            return;
+        }
         String filePath = Global.getRealPathFromURIPath(uri, getActivity());
         File file = new File(filePath);
         RequestBody mFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
@@ -136,8 +153,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         map.put("size", size);
         map.put("stars", size);
         map.put("description", description);
-        Log.d("Tag",categoryId+" "+ size+ " "+ price+" " +name);
-        productViewModel.addProduct(categoryId,map);
+        Log.d("Tag", categoryId + " " + size + " " + price + " " + name);
+        productViewModel.addProduct(categoryId, map);
+        Global.hideKeyboard(getActivity());
+        getActivity().onBackPressed();
     }
 
     private void openCropActivity(Uri sourceUri, Uri destinationUri) {
@@ -203,6 +222,32 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         } catch (Exception e) {
             e.getMessage();
         }
+    }
+
+    private boolean verifyFields() {
+        Animation animShake = AnimationUtils.loadAnimation(context, R.anim.shake);
+        boolean isFilledAllFields = true;
+        if (uri == null) {
+            isFilledAllFields = false;
+            productImageView.startAnimation(animShake);
+        }
+        if (nameEt.getText().toString().isEmpty()) {
+            isFilledAllFields = false;
+            nameEt.startAnimation(animShake);
+        }
+        if (priceEt.getText().toString().isEmpty()) {
+            isFilledAllFields = false;
+            priceEt.startAnimation(animShake);
+        }
+        if (sizeEt.getText().toString().isEmpty()) {
+            isFilledAllFields = false;
+            sizeEt.startAnimation(animShake);
+        }
+        if (descriptionEt.getText().toString().isEmpty()) {
+            isFilledAllFields = false;
+            descriptionEt.startAnimation(animShake);
+        }
+        return isFilledAllFields;
     }
 
     @Override

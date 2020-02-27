@@ -6,11 +6,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -22,14 +21,12 @@ import ani.am.e_commerce.db.entity.Product;
 
 public class ProductsActivity extends AppCompatActivity {
     private List<Product> productslist;
-    private PrefConfig prefConfig;
     private Category category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
-        prefConfig = new PrefConfig(this);
         getSupportActionBar().setTitle(R.string.products);
         String json = getIntent().getStringExtra("category");
 
@@ -50,5 +47,7 @@ public class ProductsActivity extends AppCompatActivity {
         ProductAdapter adapter = new ProductAdapter(productslist);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation);
+        recyclerView.setLayoutAnimation(animation);
     }
 }
