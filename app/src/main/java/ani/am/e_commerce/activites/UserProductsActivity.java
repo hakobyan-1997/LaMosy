@@ -1,9 +1,7 @@
 package ani.am.e_commerce.activites;
 
-import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 
@@ -20,27 +18,22 @@ import android.view.animation.LayoutAnimationController;
 
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
+import ani.am.e_commerce.Global;
 import ani.am.e_commerce.PrefConfig;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.adapters.UserProductAdapter;
 import ani.am.e_commerce.fragments.AddProductFragment;
 import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.db.entity.Product;
-import ani.am.e_commerce.view_models.CategoryViewModel;
 import ani.am.e_commerce.view_models.ProductViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 public class UserProductsActivity extends AppCompatActivity implements HasSupportFragmentInjector {
@@ -58,6 +51,7 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Global.setLocaleLanguage(this, prefConfig.getLang());
         setContentView(R.layout.activity_user_products);
         AndroidInjection.inject(this);
         productViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);

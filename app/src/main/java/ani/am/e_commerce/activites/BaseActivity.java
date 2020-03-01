@@ -11,11 +11,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import javax.inject.Inject;
 
+import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.fragments.AddCategoryFragment;
 import ani.am.e_commerce.fragments.ProfileFragment;
@@ -41,6 +43,7 @@ public class BaseActivity extends AppCompatActivity implements UpdatePageInterfa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Global.setLocaleLanguage(this, prefConfig.getLang());
         setContentView(R.layout.activity_base);
         this.configureDagger();
         userViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserViewModel.class);

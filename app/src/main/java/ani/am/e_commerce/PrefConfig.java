@@ -23,6 +23,14 @@ public class PrefConfig {
         sharedPreferences = context.getSharedPreferences(context.getString(R.string.pref_file),Context.MODE_PRIVATE);
     }
 
+    public void setLang(String lang){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("language", lang);
+        editor.commit();
+    }
+    public String getLang(){
+        return sharedPreferences.getString("language", "hy");
+    }
     public void writeLoginStatus(boolean status){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(context.getString(R.string.pref_login_status),status);
@@ -42,6 +50,7 @@ public class PrefConfig {
     public String readName(){
         return sharedPreferences.getString(context.getString(R.string.pref_user_name),"User");
     }
+
     public void writeToken(String token, String key){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key,token);
@@ -51,6 +60,7 @@ public class PrefConfig {
     public String readToken(String key){
         return sharedPreferences.getString(key,"");
     }
+
     public void setCategoriesList(String key, List<Category> list){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
@@ -72,6 +82,7 @@ public class PrefConfig {
         }
         return list;
     }
+
     public void displayToast(String message){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }

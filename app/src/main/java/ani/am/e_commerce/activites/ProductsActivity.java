@@ -13,11 +13,14 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
+import ani.am.e_commerce.Global;
 import ani.am.e_commerce.PrefConfig;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.adapters.ProductAdapter;
 import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.db.entity.Product;
+
+import static ani.am.e_commerce.activites.MainActivity.prefConfig;
 
 public class ProductsActivity extends AppCompatActivity {
     private List<Product> productslist;
@@ -26,6 +29,7 @@ public class ProductsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Global.setLocaleLanguage(this, prefConfig.getLang());
         setContentView(R.layout.activity_products);
         getSupportActionBar().setTitle(R.string.products);
         String json = getIntent().getStringExtra("category");

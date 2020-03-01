@@ -4,9 +4,7 @@
     <string name="pref_file">ani.am.preference_file</string>
     <string name="pref_login_status">ani.am.preference_login_status</string>
     <string name="pref_user_name">ani.am.preference_user_name</string>
-    <string name="pref_user_token">ani.am.preference_user_token</string>
 
-    <string name="login_form">Մուտքագրեք</string>
     <string name="user_name">Օգտագործողի անուն</string>
     <string name="user_pass">Գաղտնաբառ</string>
     <string name="user_retype_pass">Կրկնել գաղտնաբառը</string>
@@ -15,12 +13,10 @@
     <string name="new_user">Նոր օգտատեր? Գրանցվել</string>
     <string name="already_have_acount">Դուք արդեն ունեք հաշիվ? Մուտք գործել</string>
 
-    <string name="registration_form">Գրանցում</string>
     <string name="name">Անուն</string>
     <string name="register">Գրանցում</string>
 
     <string name="something_went_wrong">Ինչ որ բան այնպես չէ․․․</string>
-    <string name="try_again">Կրկին փորձեք․․․</string>
     <string name="complete_all_fields">Լրացրեք բոլոր դաշտերը․․․</string>
     <string name="change_fields">Փոփոխել դաշտերը․․․</string>
     <string name="invalid_email_address">Սխալ էլ-հասցե․․․</string>
@@ -49,14 +45,12 @@
     <string name="product_name">Ապրանքի անվանումը</string>
     <string name="price">Գինը</string>
     <string name="description">Նկարագրություն</string>
-    <string name="count">Քանակ</string>
-    <string name="discount">Զեղչ</string>
-    <string name="gender">Սեռ</string>
     <string name="size">Չափ</string>
 
-    <string name="hint">Սեղմեք և խոսեք</string>
-    <string name="search_text">Բարև Ձեզ։ Ի՞նչ եք ցանկանում որոնել։</string>
     <string name="dark_mode">Մութ ռեժիմ</string>
     <string name="language">Լեզու</string>
     <string name="app_version">Հավելվածի տարբերակը : %1$s</string>
+
+    <string name="english">Անգլերեն</string>
+    <string name="armenian">Հայերեն</string>
 </resources>

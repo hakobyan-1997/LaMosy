@@ -1,8 +1,10 @@
 package ani.am.e_commerce.activites;
+
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import javax.inject.Inject;
@@ -17,8 +19,7 @@ import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector,LoginFragment.OnLoginFormActivityListener
-{
+public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector, LoginFragment.OnLoginFormActivityListener {
     public static PrefConfig prefConfig;
 
     @Inject
@@ -27,20 +28,21 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Global.setLocaleLanguage(this,"hy");
-        setContentView(R.layout.activity_main);
+        //Global.setLocaleLanguage(this,"hy");
         prefConfig = new PrefConfig(this);
-
+        Global.setLocaleLanguage(this, prefConfig.getLang());
+        setContentView(R.layout.activity_main);
         this.configureDagger();
-        Log.d("Tag","isLogin " + prefConfig.readLoginStatus());
-        if(prefConfig.readLoginStatus()){
-            startActivity(new Intent(this,BaseActivity.class));
+        Log.d("Tag", "isLogin " + prefConfig.readLoginStatus());
+        if (prefConfig.readLoginStatus()) {
+            startActivity(new Intent(this, BaseActivity.class));
             finish();
-        }else{
+        } else {
             this.showFragment(savedInstanceState);
         }
 
-        //this.showFragment(savedInstanceState);
+
+
     }
 
     @Override
@@ -57,10 +59,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
 
     public void performLogin(String name, String token, String id) {
-        Log.d("Tag"," performLogin "+name + " "+ token+ " "+id);
+        Log.d("Tag", " performLogin " + name + " " + token + " " + id);
         prefConfig.writeName(name);
-        prefConfig.writeToken(token,"token");
-        prefConfig.writeToken(id,"id");
+        prefConfig.writeToken(token, "token");
+        prefConfig.writeToken(id, "id");
        /* startActivity(new Intent(getApplicationContext(),BaseActivity.class));
         finish();*/
     }
@@ -70,11 +72,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         return dispatchingAndroidInjector;
     }
 
-    private void configureDagger(){
+    private void configureDagger() {
         AndroidInjection.inject(this);
     }
 
-    private void showFragment(Bundle savedInstanceState){
+    private void showFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
 
             AllCategoriesFragment fragment = new AllCategoriesFragment();

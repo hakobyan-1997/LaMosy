@@ -4,9 +4,7 @@
     <string name="pref_file">ani.am.preference_file</string>
     <string name="pref_login_status">ani.am.preference_login_status</string>
     <string name="pref_user_name">ani.am.preference_user_name</string>
-    <string name="pref_user_token">ani.am.preference_user_token</string>
 
-    <string name="login_form">Login Form</string>
     <string name="user_name">User Name</string>
     <string name="user_pass">Password</string>
     <string name="user_retype_pass">Retype Password</string>
@@ -15,12 +13,10 @@
     <string name="new_user">New User? Register Now</string>
     <string name="already_have_acount">Already have an account? Login</string>
 
-    <string name="registration_form">Registration Form</string>
     <string name="name">Name</string>
     <string name="register">Register</string>
 
     <string name="something_went_wrong">Something went wrong...</string>
-    <string name="try_again">Try again...</string>
     <string name="complete_all_fields">Complete all fields...</string>
     <string name="change_fields">Change fields...</string>
     <string name="invalid_email_address">Invalid email address...</string>
@@ -48,14 +44,12 @@
     <string name="product_name">Product Name</string>
     <string name="price">Price</string>
     <string name="description">Description</string>
-    <string name="count">Count</string>
-    <string name="discount">Discount</string>
-    <string name="gender">Gender</string>
     <string name="size">Size</string>
 
-    <string name="hint">Tap on mic to start</string>
-    <string name="search_text">Hello, What do you want to search?</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="language">Language</string>
     <string name="app_version">App version : %1$s</string>
+
+    <string name="english">English</string>
+    <string name="armenian">Armenian</string>
 </resources>
