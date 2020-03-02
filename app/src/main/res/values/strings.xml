@@ -59,5 +59,6 @@
 
     <string name="english">English</string>
     <string name="armenian">Armenian</string>
+    <string name="label_buy_now">Buy Now</string>
 
 </resources>

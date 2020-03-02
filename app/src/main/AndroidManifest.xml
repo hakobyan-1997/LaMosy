@@ -17,11 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activites.CardFormActivity"></activity>
         <activity
             android:name=".activites.SplashActivity"
-            android:theme="@style/SplasTheme"
+            android:noHistory="true"
             android:screenOrientation="portrait"
-            android:noHistory="true">
+            android:theme="@style/SplasTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -29,16 +30,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activites.ProductsActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activites.UserProductsActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activites.ProductsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.UserProductsActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activites.BaseActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activites.MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activites.MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

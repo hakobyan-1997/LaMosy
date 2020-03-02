@@ -1,6 +1,7 @@
 package ani.am.e_commerce.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -19,6 +20,7 @@ import java.net.URL;
 import java.util.List;
 
 import ani.am.e_commerce.R;
+import ani.am.e_commerce.activites.CardFormActivity;
 import ani.am.e_commerce.db.entity.Product;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
@@ -51,6 +53,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             stars[2] = itemView.findViewById(R.id.star_3);
             stars[3] = itemView.findViewById(R.id.star_4);
             stars[4] = itemView.findViewById(R.id.star_5);
+            price.setOnClickListener(view1 -> {
+                Intent intent = new Intent(context, CardFormActivity.class);
+                context.startActivity(intent);
+            });
         }
     }
 
