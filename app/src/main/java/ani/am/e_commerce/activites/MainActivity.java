@@ -46,12 +46,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Override
-    protected void onResume() {
-        getSupportActionBar().show();
-        super.onResume();
-    }
-
-    @Override
     public void performRegister() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new RegistrationFragment()).addToBackStack(null).commit();

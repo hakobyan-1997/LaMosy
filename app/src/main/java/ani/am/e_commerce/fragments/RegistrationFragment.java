@@ -6,7 +6,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,6 +36,11 @@ public class RegistrationFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -48,6 +56,9 @@ public class RegistrationFragment extends Fragment {
     }
 
     private void init(View view) {
+        final Toolbar mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         name = view.findViewById(R.id.txt_name);
         userName = view.findViewById(R.id.txt_user_name);
         userPassword = view.findViewById(R.id.txt_user_pass);
@@ -101,5 +112,15 @@ public class RegistrationFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().onBackPressed();
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
     }
 }

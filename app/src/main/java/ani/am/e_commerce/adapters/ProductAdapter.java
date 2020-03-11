@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -22,27 +23,32 @@ import java.util.List;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.activites.CardFormActivity;
 import ani.am.e_commerce.db.entity.Product;
+import ani.am.e_commerce.interfaces.CustomOnClickListener;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
+    private CustomOnClickListener clickListener;
     private List<Product> productsList;
-    Context context;
+    private Context context;
     private View view;
     private ViewHolder viewHolder;
 
-    public ProductAdapter(List<Product> list) {
-        productsList = list;
+    public ProductAdapter(List<Product> list, CustomOnClickListener clickListener) {
+        this.productsList = list;
+        this.clickListener = clickListener;
     }
 
-    protected class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView name;
-        public TextView description;
-        public TextView price;
-        public ImageView image;
-        public RatingBar ratingBar;
-        public ImageView stars[] = new ImageView[5];
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final RelativeLayout contentLayout;
+        final TextView name;
+        final TextView description;
+        final TextView price;
+        final ImageView image;
+        final RatingBar ratingBar;
+        final ImageView stars[] = new ImageView[5];
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
+            contentLayout = itemView.findViewById(R.id.content_layout);
             name = itemView.findViewById(R.id.product_name);
             image = itemView.findViewById(R.id.product_image);
             description = itemView.findViewById(R.id.product_short_description);
@@ -76,6 +82,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         viewHolder.name.setText(product.getName());
         viewHolder.description.setText(product.getDescription());
         viewHolder.price.setText(context.getString(R.string.price).concat(" ").concat(String.valueOf(product.getPrice())).concat( "$"));
+        viewHolder.contentLayout.setOnClickListener(v -> clickListener.onClickListener(position));
         URL url = null;
         Log.d("Tag", product.getPicture());
         if (product.getPicture() != " ") {

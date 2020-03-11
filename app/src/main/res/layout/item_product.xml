@@ -13,6 +13,7 @@
     app:cardCornerRadius="6dp">
 
     <RelativeLayout
+        android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
@@ -40,6 +41,7 @@
             android:layout_toEndOf="@+id/product_image"
             android:layout_toStartOf="@+id/delete"
             android:layout_centerHorizontal="true"
+            android:singleLine="true"
             android:paddingLeft="@dimen/marginLeftSize"
             android:paddingRight="@dimen/marginLeftSize"
             android:text="@string/name"
@@ -66,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/product_image"
-            android:layout_above="@+id/stars_layout"
+            android:layout_below="@+id/product_image"
             android:layout_centerHorizontal="true"
             android:drawableEnd="@drawable/ic_shop"
             android:paddingLeft="@dimen/marginLeftSize"
@@ -85,11 +87,13 @@
             android:stepSize="0.5"
             android:visibility="gone"
             android:layout_centerHorizontal="true" />
+
         <LinearLayout
             android:id="@+id/stars_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/product_image"
+            android:layout_toStartOf="@+id/product_image"
             android:padding="@dimen/paddingSize">
             <ImageView
                 android:id="@+id/star_1"

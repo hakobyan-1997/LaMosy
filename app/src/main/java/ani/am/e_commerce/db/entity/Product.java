@@ -8,8 +8,10 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 @Entity
-public class Product {
+public class Product implements Serializable {
     @NonNull
     @PrimaryKey
     @SerializedName("id")
