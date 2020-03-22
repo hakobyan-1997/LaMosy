@@ -1,7 +1,6 @@
 package ani.am.e_commerce.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -21,7 +20,6 @@ import java.net.URL;
 import java.util.List;
 
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.activites.CardFormActivity;
 import ani.am.e_commerce.db.entity.Product;
 import ani.am.e_commerce.interfaces.CustomOnClickListener;
 
@@ -40,7 +38,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
         final RelativeLayout contentLayout;
         final TextView name;
-        final TextView description;
         final TextView price;
         final ImageView image;
         final RatingBar ratingBar;
@@ -51,7 +48,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             contentLayout = itemView.findViewById(R.id.content_layout);
             name = itemView.findViewById(R.id.product_name);
             image = itemView.findViewById(R.id.product_image);
-            description = itemView.findViewById(R.id.product_short_description);
             price = itemView.findViewById(R.id.product_price);
             ratingBar = itemView.findViewById(R.id.radioBar);
             stars[0] = itemView.findViewById(R.id.star_1);
@@ -59,10 +55,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             stars[2] = itemView.findViewById(R.id.star_3);
             stars[3] = itemView.findViewById(R.id.star_4);
             stars[4] = itemView.findViewById(R.id.star_5);
-            price.setOnClickListener(view1 -> {
-                Intent intent = new Intent(context, CardFormActivity.class);
-                context.startActivity(intent);
-            });
         }
     }
 
@@ -80,8 +72,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public void onBindViewHolder(@NonNull ProductAdapter.ViewHolder viewHolder, int position) {
         Product product = productsList.get(position);
         viewHolder.name.setText(product.getName());
-        viewHolder.description.setText(product.getDescription());
-        viewHolder.price.setText(context.getString(R.string.price).concat(" ").concat(String.valueOf(product.getPrice())).concat( "$"));
+        viewHolder.price.setText((String.valueOf(product.getPrice())).concat("$"));
         viewHolder.contentLayout.setOnClickListener(v -> clickListener.onClickListener(position));
         URL url = null;
         Log.d("Tag", product.getPicture());
@@ -98,7 +89,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     private void setStarsColorFilter(int productStars) {
         for (int i = 0; i < productStars; i++) {
-            viewHolder.stars[i].setColorFilter(ContextCompat.getColor(context,R.color.md_yellow_700), PorterDuff.Mode.SRC_IN);
+            viewHolder.stars[i].setColorFilter(ContextCompat.getColor(context, R.color.md_yellow_700), PorterDuff.Mode.SRC_IN);
         }
     }
 

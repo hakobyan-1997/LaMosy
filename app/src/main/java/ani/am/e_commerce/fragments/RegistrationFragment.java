@@ -15,16 +15,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import javax.inject.Inject;
 
-import ani.am.e_commerce.activites.MainActivity;
+import ani.am.e_commerce.activities.MainActivity;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.db.entity.User;
 import ani.am.e_commerce.view_models.UserViewModel;
 import dagger.android.support.AndroidSupportInjection;
 
 public class RegistrationFragment extends Fragment {
-    private EditText name,userName,userEmail, userPassword, userRetypePassword;
+    private EditText name, userName, userEmail, userPassword, userRetypePassword;
     private Button btnRegister;
     private Context context;
 
@@ -45,14 +46,14 @@ public class RegistrationFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         AndroidSupportInjection.inject(this);
-        userViewModel = ViewModelProviders.of(this,viewModelFactory).get(UserViewModel.class);
+        userViewModel = ViewModelProviders.of(this, viewModelFactory).get(UserViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_registration, container, false);
+        View view = inflater.inflate(R.layout.fragment_registration, container, false);
         init(view);
-        return  view;
+        return view;
     }
 
     private void init(View view) {
@@ -72,35 +73,35 @@ public class RegistrationFragment extends Fragment {
             }
         });
         TextView loginTv = view.findViewById(R.id.login_txt);
-        loginTv.setOnClickListener(v->  ((MainActivity)getActivity()).onBackPressed());
+        loginTv.setOnClickListener(v -> ((MainActivity) getActivity()).onBackPressed());
     }
 
-    public void performRegistrtion(){
+    public void performRegistrtion() {
         String n = name.getText().toString();
-        String username= userName.getText().toString();
+        String username = userName.getText().toString();
         String password = userPassword.getText().toString();
         String retypepassword = userRetypePassword.getText().toString();
         String email = userEmail.getText().toString();
-        if(checkInputData(n,username,email,password,retypepassword)) {
+        if (checkInputData(n, username, email, password, retypepassword)) {
             User user = new User(n, username, email, password);
-            userViewModel.registration(context,user);
+            userViewModel.registration(context, user);
         }
     }
 
-    private boolean checkInputData(String name, String username, String email, String password, String retypepass){
+    private boolean checkInputData(String name, String username, String email, String password, String retypepass) {
         // եթե որևէ դաշտ լրացված չէ
-        if(name.isEmpty()||username.isEmpty()||email.isEmpty()||password.isEmpty()||retypepass.isEmpty()){
+        if (name.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || retypepass.isEmpty()) {
             MainActivity.prefConfig.displayToast(getString(R.string.complete_all_fields));
             return false;
         }
         // եթե էլ-հասցեն չի պարունակում @ կամ ․
-        if(!email.contains("@") || !email.contains(".")){
+        if (!email.contains("@") || !email.contains(".")) {
             MainActivity.prefConfig.displayToast(getString(R.string.invalid_email_address));
             userEmail.setText("");
             return false;
         }
         // եթե գաղտնաբառը սխալ է կրկնված
-        if(!password.equals(retypepass)) {
+        if (!password.equals(retypepass)) {
             userPassword.setText("");
             userRetypePassword.setText("");
             return false;
@@ -119,8 +120,7 @@ public class RegistrationFragment extends Fragment {
         if (item.getItemId() == android.R.id.home) {
             getActivity().onBackPressed();
             return true;
-        }
-        else
+        } else
             return super.onOptionsItemSelected(item);
     }
 }

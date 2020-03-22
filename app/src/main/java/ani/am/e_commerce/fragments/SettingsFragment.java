@@ -4,24 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import ani.am.e_commerce.BuildConfig;
 import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.activites.BaseActivity;
+import ani.am.e_commerce.activities.BaseActivity;
 
-import static ani.am.e_commerce.activites.MainActivity.prefConfig;
+import static ani.am.e_commerce.activities.MainActivity.prefConfig;
 
 public class SettingsFragment extends Fragment {
     private View view;
@@ -47,13 +43,13 @@ public class SettingsFragment extends Fragment {
 
         appVersion.setText(context.getString(R.string.app_version, BuildConfig.VERSION_NAME));
 
-        String[] spinnerArray = {getString(R.string.english),getString(R.string.armenian)};
+        String[] spinnerArray = {getString(R.string.english), getString(R.string.armenian)};
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, spinnerArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
                 .simple_spinner_dropdown_item);
         languageSpinner.setAdapter(spinnerArrayAdapter);
 
-        switch (prefConfig.getLang()){
+        switch (prefConfig.getLang()) {
             case "en":
                 languageSpinner.setSelection(0);
                 break;
@@ -65,18 +61,17 @@ public class SettingsFragment extends Fragment {
         languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                Intent intent = new Intent(getActivity(),BaseActivity.class);
+                Intent intent = new Intent(getActivity(), BaseActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 if (position == 0 && !prefConfig.getLang().equals("en")) {
                     Global.setLocaleLanguage(context, "en");
                     prefConfig.setLang("en");
                     context.startActivity(intent);
-                }else
-                    if(position == 1 && !prefConfig.getLang().equals("hy")) {
-                        Global.setLocaleLanguage(context, "hy");
-                        prefConfig.setLang("hy");
-                        context.startActivity(intent);
-                    }
+                } else if (position == 1 && !prefConfig.getLang().equals("hy")) {
+                    Global.setLocaleLanguage(context, "hy");
+                    prefConfig.setLang("hy");
+                    context.startActivity(intent);
+                }
             }
 
             @Override

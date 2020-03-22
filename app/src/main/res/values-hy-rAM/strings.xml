@@ -21,6 +21,7 @@
     <string name="change_fields">Փոփոխել դաշտերը․․․</string>
     <string name="invalid_email_address">Սխալ էլ-հասցե․․․</string>
 
+    <string name="home">Տուն</string>
     <string name="my_profile">Իմ էջը</string>
     <string name="settings">Կարգավորումներ</string>
     <string name="addCategory">Ավելացնել բաժին</string>
@@ -30,6 +31,7 @@
     <string name="choose_photo">Ընտրել նկար</string>
     <string name="add">Ավելացնել</string>
     <string name="cancel">Չեղարկել</string>
+    <string name="ok">Հաստատել</string>
 
     <string name="read_file">Այս հավելվածը պետք է մուտք ունենա ձեր լուսանկարների պահոց</string>
     <string name="check_internet">Խնդրում ենք ստուգել ձեր ինտերնետ կապը</string>
@@ -46,6 +48,7 @@
     <string name="price">Գինը</string>
     <string name="description">Նկարագրություն</string>
     <string name="size">Չափ</string>
+    <string name="count">Քանակ</string>
 
     <string name="dark_mode">Մութ ռեժիմ</string>
     <string name="language">Լեզու</string>
@@ -54,4 +57,16 @@
     <string name="english">Անգլերեն</string>
     <string name="armenian">Հայերեն</string>
     <string name="label_buy_now">Գնել հիմա</string>
+    <string name="card_data">Քարտի Տվյալները</string>
+
+    <string name="audio_recording_error">Ձայնագրման սխալ</string>
+    <string name="client_side_error">Այլ սխալներ օգտագործողի կողմից</string>
+    <string name="insufficient_permissions">Անբավարար թույլտվություններ</string>
+    <string name="network_error">Ցանցի հետ կապված սխալ</string>
+    <string name="network_timeout">Ցանցի գործունեությունն ավարտվեց</string>
+    <string name="no_match">Ճանաչման արդյունքը չի համընկնում</string>
+    <string name="recognition_service_busy">Ճանաչման ծառայությունը զբաղված է</string>
+    <string name="error_from_server">Սերվերում սխալ կա</string>
+    <string name="no_speech_input">Խոսքի մուտքագրում չկա</string>
+    <string name="didnt_understand">Չի հասկացվում Ձեր խոսքը, խնդրում ենք կրկին փորձել:</string>
 </resources>

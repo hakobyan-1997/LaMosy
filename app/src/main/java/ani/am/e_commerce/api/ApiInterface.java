@@ -57,5 +57,9 @@ public interface ApiInterface {
     @DELETE("/product/delete/{id}")
     Call<JsonObject> deleteProduct(@Header("x-access-token")String token, @Path("id") String id);
 
+    @Multipart
+    @PUT("/product/update/{categoryId}")
+    Call<JsonObject> updateProduct(@Header("x-access-token")String token, @Path("categoryId") String categoryId, @PartMap Map<String, RequestBody> params);
+
 }
 

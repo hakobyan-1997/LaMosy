@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,40 +23,44 @@ import java.net.URL;
 import java.util.List;
 
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.activites.UserProductsActivity;
+import ani.am.e_commerce.activities.UserProductsActivity;
 import ani.am.e_commerce.db.entity.Product;
+import ani.am.e_commerce.interfaces.CustomOnClickListener;
 
 public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.ViewHolder> {
     private List<Product> productsList;
-    Context context;
+    private Context context;
     private View view;
     private ViewHolder viewHolder;
+    private CustomOnClickListener customOnClickListener;
 
-    public UserProductAdapter(List<Product> list) {
+    public UserProductAdapter(List<Product> list, CustomOnClickListener customOnClickListener) {
         productsList = list;
+        this.customOnClickListener = customOnClickListener;
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
         final TextView name;
-        final TextView description;
         final TextView price;
         final ImageView image;
         final ImageView delete;
+        final ImageView edit;
         final ImageView stars[] = new ImageView[5];
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.product_name);
             image = itemView.findViewById(R.id.product_image);
-            description = itemView.findViewById(R.id.product_short_description);
             price = itemView.findViewById(R.id.product_price);
             delete = itemView.findViewById(R.id.delete);
+            edit = itemView.findViewById(R.id.edit);
             stars[0] = itemView.findViewById(R.id.star_1);
             stars[1] = itemView.findViewById(R.id.star_2);
             stars[2] = itemView.findViewById(R.id.star_3);
             stars[3] = itemView.findViewById(R.id.star_4);
             stars[4] = itemView.findViewById(R.id.star_5);
             delete.setVisibility(View.VISIBLE);
+            edit.setVisibility(View.VISIBLE);
         }
     }
 
@@ -65,6 +71,9 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.item_product, parent, false);
         viewHolder = new ViewHolder(view);
+        final Animation animShake = AnimationUtils.loadAnimation(context, R.anim.shake_infinite);
+        viewHolder.delete.setAnimation(animShake);
+        viewHolder.edit.setAnimation(animShake);
         return viewHolder;
     }
 
@@ -73,8 +82,7 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         Product product = productsList.get(position);
         TextView textView = viewHolder.name;
         textView.setText(product.getName());
-        viewHolder.description.setText(product.getDescription());
-        viewHolder.price.setText(context.getString(R.string.price).concat(" ").concat(String.valueOf(product.getPrice())).concat( "$"));
+        viewHolder.price.setText(context.getString(R.string.price).concat(" ").concat(String.valueOf(product.getPrice())).concat("$"));
         URL url = null;
         Log.d("Tag", product.getPicture());
         if (product.getPicture() != " ") {
@@ -84,7 +92,10 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         setStarsColorFilter(position);
 
         viewHolder.delete.setOnClickListener(v -> {
-            showDeleteDialog(product,position);
+            showDeleteDialog(product, position);
+        });
+        viewHolder.edit.setOnClickListener(view1 -> {
+            customOnClickListener.editProduct(product);
         });
     }
 
@@ -94,11 +105,11 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         if (productStars > 5)
             productStars = 5;
         for (int i = 0; i < productStars; i++) {
-            viewHolder.stars[i].setColorFilter(ContextCompat.getColor(context,R.color.md_yellow_700), PorterDuff.Mode.SRC_IN);
+            viewHolder.stars[i].setColorFilter(ContextCompat.getColor(context, R.color.md_yellow_700), PorterDuff.Mode.SRC_IN);
         }
     }
 
-    private void showDeleteDialog(Product product, int position){
+    private void showDeleteDialog(Product product, int position) {
         final Dialog dialog = new Dialog(context, R.style.DialogTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -127,8 +138,8 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         dialog.show();
     }
 
-    private void deleteProdut(Product product){
-        ((UserProductsActivity)context).deleteProduct(product);
+    private void deleteProdut(Product product) {
+        ((UserProductsActivity) context).deleteProduct(product);
     }
 
     @Override

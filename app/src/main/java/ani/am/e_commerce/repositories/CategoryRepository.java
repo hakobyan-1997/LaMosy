@@ -2,6 +2,7 @@ package ani.am.e_commerce.repositories;
 
 import android.arch.lifecycle.LiveData;
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 import javax.inject.Singleton;
+
 import ani.am.e_commerce.api.ApiInterface;
 import ani.am.e_commerce.db.dao.CategoryDao;
 import ani.am.e_commerce.db.entity.Category;
@@ -24,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static ani.am.e_commerce.activites.MainActivity.prefConfig;
+import static ani.am.e_commerce.activities.MainActivity.prefConfig;
 
 @Singleton
 public class CategoryRepository {
@@ -53,16 +55,16 @@ public class CategoryRepository {
         return categoryDao.getProductsByCategoryId(id);
     }
 
-    public void addCategory( Map<String, RequestBody> map){
+    public void addCategory(Map<String, RequestBody> map) {
         String token = prefConfig.readToken("token");
         String id = prefConfig.readToken("id");
-        Log.d("Tag","add category " + id + "  token " + token);
-        executor.execute(()->
-                apiInterface.createCategory(id,token,map).enqueue(new Callback<JsonObject>() {
+        Log.d("Tag", "add category " + id + "  token " + token);
+        executor.execute(() ->
+                apiInterface.createCategory(id, token, map).enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.d("Tag", response.toString());
-                        if(response.body() != null) {
+                        if (response.body() != null) {
                             Log.d("Tag", response.body().toString());
                         }
 
@@ -75,24 +77,24 @@ public class CategoryRepository {
                 }));
     }
 
-    public void updateCategory(String id, Map<String, RequestBody> map){
+    public void updateCategory(String id, Map<String, RequestBody> map) {
         String token = prefConfig.readToken("token");
-        Log.d("Tag","update category " + id + "  token " + token);
-        Log.d("Tag","update category " + map);
-        executor.execute(()->
-                apiInterface.updateCategory(id,token,map).enqueue(new Callback<JsonObject>() {
+        Log.d("Tag", "update category " + id + "  token " + token);
+        Log.d("Tag", "update category " + map);
+        executor.execute(() ->
+                apiInterface.updateCategory(id, token, map).enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.d("Tag", response.toString());
-                        if(response.body() != null) {
+                        if (response.body() != null) {
                             Log.d("Tag", "updateCategory " + response.body().toString());
-                           // updateData(response.body().toString());
+                            // updateData(response.body().toString());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        Log.d("Tag", "Fail updateCategory "+t.getMessage());
+                        Log.d("Tag", "Fail updateCategory " + t.getMessage());
                     }
                 }));
     }
@@ -192,7 +194,7 @@ public class CategoryRepository {
             JSONObject data = jsonObject.getJSONObject("data");
             Gson gson = new Gson();
             Category category = gson.fromJson(data.toString(), Category.class);
-            Log.d("Tag","updated Category " + category);
+            Log.d("Tag", "updated Category " + category);
             categoryDao.updateCategory(category);
 
         } catch (JSONException e) {

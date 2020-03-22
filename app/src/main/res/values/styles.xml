@@ -26,4 +26,9 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="ThemeOverlay.AppCompat.navTheme">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+    </style>
+
 </resources>

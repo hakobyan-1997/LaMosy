@@ -10,12 +10,14 @@
 
     <dimen name="paddingSize">10dp</dimen>
 
-    <dimen name="mediumTextSize">14sp</dimen>
-    <dimen name="standardTextSize">16sp</dimen>
-    <dimen name="bigTextSize">18sp</dimen>
+    <dimen name="mediumTextSize">12sp</dimen>
+    <dimen name="standardTextSize">14sp</dimen>
+    <dimen name="bigTextSize">16sp</dimen>
 
     <dimen name="starIconSize">20dp</dimen>
     <dimen name="starIconsMarginSize">5dp</dimen>
+
+    <dimen name="item_size">250dp</dimen>
 
 
 </resources>

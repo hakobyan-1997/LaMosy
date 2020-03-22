@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activites.MainActivity"
+    tools:context=".activities.MainActivity"
     android:background="@drawable/background"
     android:orientation="vertical">
 
@@ -14,6 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_collapseMode="pin"
+        app:title="@string/register"
         android:background="@android:color/transparent"
         android:layout_alignParentTop="true"/>
 
@@ -37,8 +38,7 @@
                 android:padding="@dimen/paddingSize"
                 android:textSize="@dimen/mediumTextSize"
                 android:drawableEnd="@drawable/ic_logout"
-                android:textColor="@color/md_light_blue_50"
-                android:textColorHint="@color/md_light_blue_50"
+                android:textColor="@color/textColor"
                 android:hint="@string/name" />
 
             <EditText
@@ -52,8 +52,7 @@
                 android:textSize="@dimen/mediumTextSize"
                 android:hint="@string/user_name"
                 android:drawableEnd="@drawable/ic_person"
-                android:textColor="@color/md_light_blue_50"
-                android:textColorHint="@color/md_light_blue_50"/>
+                android:textColor="@color/textColor"/>
 
             <EditText
                 android:id="@+id/txt_user_email"
@@ -66,8 +65,7 @@
                 android:textSize="@dimen/mediumTextSize"
                 android:hint="@string/user_email"
                 android:drawableEnd="@drawable/ic_email"
-                android:textColor="@color/md_light_blue_50"
-                android:textColorHint="@color/md_light_blue_50"
+                android:textColor="@color/textColor"
                 android:inputType="textEmailAddress" />
 
             <EditText
@@ -77,8 +75,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/marginLayoutSize"
                 android:background="@drawable/background_edit_text"
-                android:textColor="@color/md_light_blue_50"
-                android:textColorHint="@color/md_light_blue_50"
+                android:textColor="@color/textColor"
                 android:drawableEnd="@drawable/ic_lock"
                 android:padding="@dimen/paddingSize"
                 android:textSize="@dimen/mediumTextSize"
@@ -96,8 +93,7 @@
                 android:textSize="@dimen/mediumTextSize"
                 android:hint="@string/user_retype_pass"
                 android:drawableEnd="@drawable/ic_lock_outline"
-                android:textColor="@color/md_light_blue_50"
-                android:textColorHint="@color/md_light_blue_50"
+                android:textColor="@color/textColor"
                 android:inputType="textPassword" />
 
             <Button
@@ -109,8 +105,7 @@
                 android:textAllCaps="false"
                 android:background="@drawable/background_button"
                 android:text="@string/register"
-                android:textColor="@color/md_light_blue_50"
-                android:textColorHint="@color/md_light_blue_50"/>
+                android:textColor="@color/textColor"/>
 
             <TextView
                 android:id="@+id/login_txt"

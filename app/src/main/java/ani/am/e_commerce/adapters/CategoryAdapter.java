@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +13,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.yayandroid.parallaxrecyclerview.ParallaxImageView;
+import com.yayandroid.parallaxrecyclerview.ParallaxRecyclerView;
+import com.yayandroid.parallaxrecyclerview.ParallaxViewHolder;
 
 import java.net.URL;
 import java.util.List;
 
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.activites.ProductsActivity;
+import ani.am.e_commerce.activities.ProductsActivity;
 import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.db.entity.Product;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
+public class CategoryAdapter extends ParallaxRecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private List<Category> categorisList;
     private List<Product> productsList;
     Context context;
@@ -33,23 +35,25 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         categorisList = list;
     }
 
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    protected class ViewHolder extends ParallaxViewHolder {
         public TextView name;
-        public ImageView image;
+        public ParallaxImageView image;
+
+        @Override
+        public int getParallaxImageId() {
+            return R.id.category_image;
+        }
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.category_name);
             image = itemView.findViewById(R.id.category_image);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Gson gson = new Gson();
-                    String json = gson.toJson(categorisList.get(getAdapterPosition()));
-                    Intent intent = new Intent(context, ProductsActivity.class);
-                    intent.putExtra("category", json);
-                    ((Activity) context).startActivity(intent);
-                }
+            itemView.setOnClickListener(v -> {
+                Gson gson = new Gson();
+                String json = gson.toJson(categorisList.get(getAdapterPosition()));
+                Intent intent = new Intent(context, ProductsActivity.class);
+                intent.putExtra("category", json);
+                ((Activity) context).startActivity(intent);
             });
         }
     }
@@ -73,9 +77,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         URL url = null;
         Log.d("Tag", category.getCategoryPicture());
         if (category.getCategoryPicture() != " ") {
-            Glide.with(context).load("http://5.9.1.58:3000/" + category.getCategoryPicture())
+            Glide.with(context)
+                    .load("http://5.9.1.58:3000/" + category.getCategoryPicture())
                     .into(imageView);
         }
+        viewHolder.getBackgroundImage().reuse();
     }
 
     @Override

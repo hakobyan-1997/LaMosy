@@ -1,4 +1,4 @@
-package ani.am.e_commerce.activites;
+package ani.am.e_commerce.activities;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -29,6 +29,7 @@ import ani.am.e_commerce.adapters.UserProductAdapter;
 import ani.am.e_commerce.fragments.AddProductFragment;
 import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.db.entity.Product;
+import ani.am.e_commerce.interfaces.CustomOnClickListener;
 import ani.am.e_commerce.view_models.ProductViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +37,7 @@ import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class UserProductsActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class UserProductsActivity extends AppCompatActivity implements HasSupportFragmentInjector, CustomOnClickListener {
     private PrefConfig prefConfig;
     private UserProductAdapter adapter;
     private Category category;
@@ -51,19 +52,19 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prefConfig = new PrefConfig(this);
         Global.setLocaleLanguage(this, prefConfig.getLang());
         setContentView(R.layout.activity_user_products);
         AndroidInjection.inject(this);
         productViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
         ButterKnife.bind(this);
-        prefConfig = new PrefConfig(this);
         FloatingActionButton addProductButton = (FloatingActionButton) findViewById(R.id.add_product);
         addProductButton.setOnClickListener(v -> {
             addProductButton.hide();
             openAddProductFragment();
         });
 
-        getSupportActionBar().setTitle(R.string.products);
+        // getSupportActionBar().setTitle(R.string.products);
         String categoryJson = getIntent().getStringExtra("category");
         Log.d("Tag", "categoryJson " + categoryJson);
         Gson gson = new Gson();
@@ -75,7 +76,7 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
         else
             findViewById(R.id.empty_string).setVisibility(View.GONE);
 
-        adapter = new UserProductAdapter(products);
+        adapter = new UserProductAdapter(products, this);
         productsRv.setAdapter(adapter);
         productsRv.setLayoutManager(new LinearLayoutManager(this));
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation);
@@ -112,6 +113,18 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
         transaction.commit();
     }
 
+    public void openEditFragment(Product product) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+
+        Fragment fragment = AddProductFragment.newInstance(product);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     @Override
     public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
@@ -120,5 +133,25 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
     public void deleteProduct(Product product) {
         productViewModel.deleteProduct(product);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onClickListener(int position) {
+
+    }
+
+    @Override
+    public void editProduct(Product product) {
+        openEditFragment(product);
+    }
+
+    @Override
+    public void editCategory(int position) {
+
+    }
+
+    @Override
+    public void removeCategory(int position) {
+
     }
 }

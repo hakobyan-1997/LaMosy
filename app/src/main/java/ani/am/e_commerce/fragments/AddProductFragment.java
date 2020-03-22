@@ -1,6 +1,5 @@
 package ani.am.e_commerce.fragments;
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
@@ -27,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import ani.am.e_commerce.Constants;
 import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
+import ani.am.e_commerce.db.entity.Product;
 import ani.am.e_commerce.view_models.ProductViewModel;
 import dagger.android.support.AndroidSupportInjection;
 import okhttp3.MediaType;
@@ -48,20 +49,19 @@ import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class AddProductFragment extends Fragment implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
-    private EditText nameEt, priceEt, sizeEt, descriptionEt;
+    private EditText nameEt, priceEt, sizeEt, countEt, descriptionEt;
     private ImageView productImageView;
     private Button addBtn, cancelBtn;
     private View view;
     private Uri uri;
     private String categoryId;
     private Context context;
+    private Product product;
+    private boolean isUpdate = false;
 
     @Inject
     ViewModelProvider.Factory viewModelProvider;
     ProductViewModel productViewModel;
-
-    public AddProductFragment() {
-    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -78,22 +78,27 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         return fragment;
     }
 
+    public static AddProductFragment newInstance(Product product) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("product", product);
+        AddProductFragment fragment = new AddProductFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_add_product, container, false);
         init();
         return view;
     }
 
     private void init() {
-        getActivity().setTitle(getString(R.string.addProduct));
-        Bundle args = getArguments();
-        categoryId = args.getString("id");
         nameEt = view.findViewById(R.id.product_name_et);
         priceEt = view.findViewById(R.id.product_price_et);
         sizeEt = view.findViewById(R.id.product_size_et);
+        countEt = view.findViewById(R.id.product_count_et);
         descriptionEt = view.findViewById(R.id.product_description_et);
         productImageView = view.findViewById(R.id.product_image_view);
         addBtn = view.findViewById(R.id.add_btn);
@@ -102,6 +107,19 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         productImageView.setOnClickListener(this);
         addBtn.setOnClickListener(this);
         cancelBtn.setOnClickListener(this);
+
+        Bundle args = getArguments();
+        if (args.getString("id") != null) {
+            isUpdate = false;
+            categoryId = args.getString("id");
+            getActivity().setTitle(getString(R.string.addProduct));
+        } else {
+            isUpdate = true;
+            product = (Product) args.getSerializable("product");
+            getActivity().setTitle(getString(R.string.edit));
+            fillFields();
+        }
+
         if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
             EasyPermissions.requestPermissions(this, getString(R.string.read_file), Constants.READ_REQUEST_CODE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -120,7 +138,10 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
                 choosePhoto();
                 break;
             case R.id.add_btn:
-                addProduct();
+                if (!isUpdate)
+                    addProduct();
+                else
+                    editProduct();
                 break;
             case R.id.cancel_btn:
                 getActivity().onBackPressed();
@@ -145,6 +166,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), nameEt.getText().toString());
         RequestBody price = RequestBody.create(MediaType.parse("text/plain"), priceEt.getText().toString());
         RequestBody size = RequestBody.create(MediaType.parse("text/plain"), sizeEt.getText().toString());
+        RequestBody count = RequestBody.create(MediaType.parse("text/plain"), countEt.getText().toString());
         RequestBody description = RequestBody.create(MediaType.parse("text/plain"), descriptionEt.getText().toString());
         Map<String, RequestBody> map = new HashMap<>();
         map.put("picture\"; filename=\"" + file.getName() + "\"", mFile);
@@ -152,9 +174,37 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         map.put("price", price);
         map.put("size", size);
         map.put("stars", size);
+        map.put("count", count);
         map.put("description", description);
         Log.d("Tag", categoryId + " " + size + " " + price + " " + name);
         productViewModel.addProduct(categoryId, map);
+        Global.hideKeyboard(getActivity());
+        getActivity().onBackPressed();
+    }
+
+    private void editProduct() {
+        if (!verifyFields()) {
+            Toast.makeText(context, context.getString(R.string.complete_all_fields), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String filePath = Global.getRealPathFromURIPath(uri, getActivity());
+        File file = new File(filePath);
+        RequestBody mFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), nameEt.getText().toString());
+        RequestBody price = RequestBody.create(MediaType.parse("text/plain"), priceEt.getText().toString());
+        RequestBody size = RequestBody.create(MediaType.parse("text/plain"), sizeEt.getText().toString());
+        RequestBody count = RequestBody.create(MediaType.parse("text/plain"), countEt.getText().toString());
+        RequestBody description = RequestBody.create(MediaType.parse("text/plain"), descriptionEt.getText().toString());
+        Map<String, RequestBody> map = new HashMap<>();
+        map.put("picture\"; filename=\"" + file.getName() + "\"", mFile);
+        map.put("name", name);
+        map.put("price", price);
+        map.put("size", size);
+        map.put("stars", size);
+        map.put("count", count);
+        map.put("description", description);
+        Log.d("Tag", categoryId + " " + size + " " + price + " " + name);
+        productViewModel.updateProduct(product.getCategoryId(), map);
         Global.hideKeyboard(getActivity());
         getActivity().onBackPressed();
     }
@@ -243,11 +293,29 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             isFilledAllFields = false;
             sizeEt.startAnimation(animShake);
         }
+        if (countEt.getText().toString().isEmpty()) {
+            isFilledAllFields = false;
+            countEt.startAnimation(animShake);
+        }
         if (descriptionEt.getText().toString().isEmpty()) {
             isFilledAllFields = false;
             descriptionEt.startAnimation(animShake);
         }
         return isFilledAllFields;
+    }
+
+    private void fillFields() {
+        if (product == null)
+            return;
+        nameEt.setText(product.getName());
+        priceEt.setText(String.valueOf(product.getPrice()));
+        sizeEt.setText(String.valueOf(product.getSize()));
+        countEt.setText(String.valueOf(product.getCount()));
+        descriptionEt.setText(product.getDescription());
+        Glide.with(context.getApplicationContext())
+                .load("http://5.9.1.58:3000/" + product.getPicture())
+                .into(productImageView);
+        uri = Uri.parse("http://5.9.1.58:3000/" + product.getPicture());
     }
 
     @Override

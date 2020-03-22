@@ -1,6 +1,7 @@
 package ani.am.e_commerce.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +32,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,19 +41,22 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
 import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
 
-import ani.am.e_commerce.activites.MainActivity;
+import ani.am.e_commerce.activities.MainActivity;
 import ani.am.e_commerce.adapters.CategoryAdapter;
 import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.view_models.CategoryViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
+
+import static ani.am.e_commerce.activities.MainActivity.prefConfig;
 
 public class AllCategoriesFragment extends Fragment implements RecognitionListener {
     private View view;
@@ -80,7 +86,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         this.context = context;
     }
 
-    @Override
+   /* @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -89,7 +95,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.option_menu, menu);
 
-    }
+    }*/
 
     private void configureDagger() {
         AndroidSupportInjection.inject(this);
@@ -101,7 +107,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     }
 
     private void updateUI(@Nullable List<Category> categoryList) {
-        Log.d("Tag", "allcategorieslist  update " + categoryList.size());
+        Log.d("Tag", "all categories list  update " + categoryList.size());
         if (categoryList != null) {
             createArrayList(categoryList);
             this.categoryList = categoryList;
@@ -113,12 +119,6 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         super.onActivityCreated(savedInstanceState);
         this.configureDagger();
         this.configureViewModel();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).addToBackStack(null).commit();
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -160,19 +160,30 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         });
         mSpeakBtn = (ImageButton) view.findViewById(R.id.btnSpeak);
         mSpeakBtn.setOnClickListener(v -> startVoiceInput());
+        ImageView loginBtn = view.findViewById(R.id.login_btn);
+        if (prefConfig.readLoginStatus()) {
+            loginBtn.setVisibility(View.GONE);
+        }else{
+            loginBtn.setVisibility(View.VISIBLE);
+            loginBtn.setOnClickListener(view1 -> {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).addToBackStack(null).commit();
+            });
+        }
     }
 
     private void startVoiceInput() {
         speech = SpeechRecognizer.createSpeechRecognizer(context);
         speech.setRecognitionListener(this);
         recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, Locale.getDefault());
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "hy");
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, Locale.getDefault());
+        //recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "hy");
         //recognizerIntent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{"hy"});
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
 
-        ActivityCompat.requestPermissions((MainActivity) context, new String[]{Manifest.permission.RECORD_AUDIO}, REQ_CODE_SPEECH_INPUT);
+        recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
+
+        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.RECORD_AUDIO}, REQ_CODE_SPEECH_INPUT);
         speech.startListening(recognizerIntent);
         errorTv.setVisibility(View.GONE);
     }
@@ -193,7 +204,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     private void createArrayList(List<Category> list) {
         CategoryAdapter adapter = new CategoryAdapter(list);
         rv.setAdapter(adapter);
-        rv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        rv.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
 
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation);
         rv.setLayoutAnimation(animation);
@@ -259,8 +270,15 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     }
 
     @Override
-    public void onPartialResults(Bundle arg0) {
-        Log.d("Tag", "onPartialResults");
+    public void onPartialResults(Bundle results) {
+        Log.d("Tag", "onPartialResults ");
+        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        String text = "";
+        for (String result : matches)
+            text += result + "\n";
+        searchView.onActionViewExpanded();
+        searchView.setQuery(text, true);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -271,8 +289,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     @Override
     public void onResults(Bundle results) {
         Log.d("Tag", "onResults");
-        ArrayList<String> matches = results
-                .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
         String text = "";
         for (String result : matches)
             text += result + "\n";
@@ -287,38 +304,38 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         Log.d("Tag", "onRmsChanged: " + rmsdB);
     }
 
-    public static String getErrorText(int errorCode) {
+    private String getErrorText(int errorCode) {
         String message;
         switch (errorCode) {
             case SpeechRecognizer.ERROR_AUDIO:
-                message = "Audio recording error";
+                message = context.getString(R.string.audio_recording_error);
                 break;
             case SpeechRecognizer.ERROR_CLIENT:
-                message = "Client side error";
+                message = context.getString(R.string.client_side_error);
                 break;
             case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                message = "Insufficient permissions";
+                message = context.getString(R.string.insufficient_permissions);
                 break;
             case SpeechRecognizer.ERROR_NETWORK:
-                message = "Network error";
+                message = context.getString(R.string.network_error);
                 break;
             case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
-                message = "Network timeout";
+                message = context.getString(R.string.network_timeout);
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
-                message = "No match";
+                message = context.getString(R.string.no_match);
                 break;
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                message = "RecognitionService busy";
+                message = context.getString(R.string.recognition_service_busy);
                 break;
             case SpeechRecognizer.ERROR_SERVER:
-                message = "error from server";
+                message = context.getString(R.string.error_from_server);
                 break;
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
-                message = "No speech input";
+                message = context.getString(R.string.no_speech_input);
                 break;
             default:
-                message = "Didn't understand, please try again.";
+                message = context.getString(R.string.didnt_understand);
                 break;
         }
         return message;

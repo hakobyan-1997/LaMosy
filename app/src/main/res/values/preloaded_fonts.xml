@@ -2,6 +2,12 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/alex_brush</item>
+        <item>@font/arbutus_slab</item>
+        <item>@font/asset</item>
+        <item>@font/berkshire_swash</item>
+        <item>@font/bungee_shade</item>
+        <item>@font/petit_formal_script</item>
+        <item>@font/shojumaru</item>
         <item>@font/wellfleet</item>
     </array>
 </resources>

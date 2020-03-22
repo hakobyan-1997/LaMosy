@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import ani.am.e_commerce.activites.MainActivity;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.db.entity.User;
 import ani.am.e_commerce.view_models.UserViewModel;
@@ -34,7 +33,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private UserViewModel userViewModel;
 
     public interface OnLoginFormActivityListener {
-        public void performRegister();
+        void performRegister();
     }
 
     public LoginFragment() {

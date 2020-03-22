@@ -1,4 +1,4 @@
-package ani.am.e_commerce.activites;
+package ani.am.e_commerce.activities;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -20,6 +19,7 @@ import javax.inject.Inject;
 import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.fragments.AddCategoryFragment;
+import ani.am.e_commerce.fragments.AllCategoriesFragment;
 import ani.am.e_commerce.fragments.ProfileFragment;
 import ani.am.e_commerce.fragments.SettingsFragment;
 import ani.am.e_commerce.interfaces.UpdatePageInterfase;
@@ -28,7 +28,7 @@ import dagger.android.AndroidInjection;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-import static ani.am.e_commerce.activites.MainActivity.prefConfig;
+import static ani.am.e_commerce.activities.MainActivity.prefConfig;
 
 public class BaseActivity extends AppCompatActivity implements UpdatePageInterfase, HasSupportFragmentInjector, NavigationView.OnNavigationItemSelectedListener {
     private ActionBarDrawerToggle action;
@@ -77,6 +77,9 @@ public class BaseActivity extends AppCompatActivity implements UpdatePageInterfa
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case R.id.home:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AllCategoriesFragment()).addToBackStack(null).commit();
+                break;
             case R.id.profile:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
                 break;

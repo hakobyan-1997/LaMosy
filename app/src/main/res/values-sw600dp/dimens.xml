@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="item_size">300dp</dimen>
+    <dimen name="bigTextSize">25sp</dimen>
+    <dimen name="standardTextSize">16sp</dimen>
+    <dimen name="mediumTextSize">14sp</dimen>
+</resources>

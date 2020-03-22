@@ -16,7 +16,6 @@
         android:layout_margin="@dimen/marginLayoutSize"
         android:text="@string/delete_msg"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/standardTextSize"
         android:textStyle="bold" />
 
@@ -47,6 +46,6 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:background="@drawable/background_button"
-            android:text="@string/delete" />
+            android:text="@string/ok" />
     </LinearLayout>
 </LinearLayout>

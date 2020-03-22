@@ -1,6 +1,7 @@
 package ani.am.e_commerce.view_models;
 
 import android.arch.lifecycle.ViewModel;
+
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -16,10 +17,16 @@ public class ProductViewModel extends ViewModel {
     public ProductViewModel(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-    public void addProduct(String categoryId, Map<String, RequestBody> map){
-        productRepository.addProduct(categoryId,map);
+
+    public void addProduct(String categoryId, Map<String, RequestBody> map) {
+        productRepository.addProduct(categoryId, map);
     }
-    public void deleteProduct(Product product){
+
+    public void deleteProduct(Product product) {
         productRepository.deleteProduct(product);
+    }
+
+    public void updateProduct(String categoryId, Map<String, RequestBody> map) {
+        productRepository.updateProduct(categoryId, map);
     }
 }

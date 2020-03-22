@@ -1,10 +1,9 @@
-package ani.am.e_commerce.activites;
+package ani.am.e_commerce.activities;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import javax.inject.Inject;
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Global.setLocaleLanguage(this,"hy");
         prefConfig = new PrefConfig(this);
         Global.setLocaleLanguage(this, prefConfig.getLang());
         setContentView(R.layout.activity_main);
@@ -40,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         } else {
             this.showFragment(savedInstanceState);
         }
-
 
 
     }

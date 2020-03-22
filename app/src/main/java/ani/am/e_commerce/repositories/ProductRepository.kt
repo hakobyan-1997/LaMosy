@@ -1,7 +1,7 @@
 package ani.am.e_commerce.repositories
 
 import android.util.Log
-import ani.am.e_commerce.activites.MainActivity
+import ani.am.e_commerce.activities.MainActivity
 import ani.am.e_commerce.api.ApiInterface
 import ani.am.e_commerce.db.dao.ProductDao
 import ani.am.e_commerce.db.entity.Product
@@ -35,6 +35,27 @@ class ProductRepository(
                 }
 
                 override fun onFailure(call: Call<JsonObject?>, t: Throwable) {}
+            })
+        }
+    }
+
+    fun updateProduct(id: String, map: Map<String?, RequestBody?>) {
+        val token = MainActivity.prefConfig.readToken("token")
+        Log.d("Tag", "update product $id  token $token")
+        Log.d("Tag", "update product $map")
+        executor.execute {
+            apiInterface.updateProduct(token, id, map).enqueue(object : Callback<JsonObject?> {
+                override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+                    Log.d("Tag", response.toString())
+                    if (response.body() != null) {
+                        Log.d("Tag", "updateProduct " + response.body().toString())
+                        // updateData(response.body().toString());
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
+                    Log.d("Tag", "Fail updateProduct " + t.message)
+                }
             })
         }
     }

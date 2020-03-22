@@ -1,4 +1,4 @@
-package ani.am.e_commerce.activites;
+package ani.am.e_commerce.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import java.util.List;
 
 import ani.am.e_commerce.Global;
-import ani.am.e_commerce.PrefConfig;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.adapters.ProductAdapter;
 import ani.am.e_commerce.db.entity.Category;
@@ -26,7 +25,7 @@ import ani.am.e_commerce.db.entity.Product;
 import ani.am.e_commerce.fragments.ProductFragment;
 import ani.am.e_commerce.interfaces.CustomOnClickListener;
 
-import static ani.am.e_commerce.activites.MainActivity.prefConfig;
+import static ani.am.e_commerce.activities.MainActivity.prefConfig;
 
 public class ProductsActivity extends AppCompatActivity implements CustomOnClickListener {
     private List<Product> productslist;
@@ -51,7 +50,7 @@ public class ProductsActivity extends AppCompatActivity implements CustomOnClick
         runAnimation(productsRv);
     }
 
-    private void initToolBar(){
+    private void initToolBar() {
         final Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,18 +86,26 @@ public class ProductsActivity extends AppCompatActivity implements CustomOnClick
     }
 
     @Override
+    public void editProduct(Product product) {
+
+    }
+
+    @Override
+    public void editCategory(int position) {
+
+    }
+
+    @Override
+    public void removeCategory(int position) {
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
-        }
-        else
+        } else
             return super.onOptionsItemSelected(item);
     }
-
-    /*  @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        getSupportFragmentManager().popBackStack();
-    }*/
 }

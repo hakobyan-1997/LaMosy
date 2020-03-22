@@ -15,15 +15,15 @@ import java.util.concurrent.Executor;
 import javax.inject.Singleton;
 
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.activites.BaseActivity;
-import ani.am.e_commerce.activites.MainActivity;
+import ani.am.e_commerce.activities.BaseActivity;
+import ani.am.e_commerce.activities.MainActivity;
 import ani.am.e_commerce.api.ApiInterface;
 import ani.am.e_commerce.db.entity.User;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static ani.am.e_commerce.activites.MainActivity.prefConfig;
+import static ani.am.e_commerce.activities.MainActivity.prefConfig;
 
 @Singleton
 public class UserRepo {

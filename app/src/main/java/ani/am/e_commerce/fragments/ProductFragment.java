@@ -1,6 +1,5 @@
 package ani.am.e_commerce.fragments;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,11 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.bumptech.glide.Glide;
 
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.activites.CardFormActivity;
+import ani.am.e_commerce.activities.CardFormActivity;
 import ani.am.e_commerce.db.entity.Product;
 
 public class ProductFragment extends Fragment {
@@ -73,7 +71,7 @@ public class ProductFragment extends Fragment {
                     .into(prudImgView);
         }
         TextView priceTv = view.findViewById(R.id.price_tv);
-        String priceStr = context.getString(R.string.price)+ " "+ product.getPrice() + " $";
+        String priceStr = context.getString(R.string.price) + " " + product.getPrice() + " $";
         priceTv.setText(priceStr);
 
         FloatingActionButton buy = view.findViewById(R.id.btnBuy);
@@ -88,8 +86,7 @@ public class ProductFragment extends Fragment {
         if (item.getItemId() == android.R.id.home) {
             getActivity().onBackPressed();
             return true;
-        }
-        else
+        } else
             return super.onOptionsItemSelected(item);
     }
 

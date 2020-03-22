@@ -26,6 +26,8 @@ public class Product implements Serializable {
     private String description;
     @SerializedName("stars")
     private int stars;
+    @SerializedName("count")
+    private int count;
     @SerializedName("color")
     private String color;
     @SerializedName("size")
@@ -64,6 +66,14 @@ public class Product implements Serializable {
 
     public int getPrice() {
         return price;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public void setPrice(int price) {
@@ -137,17 +147,18 @@ public class Product implements Serializable {
     @Override
     public String toString() {
         return "Product{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", picture='" + picture + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
                 ", stars=" + stars +
+                ", count=" + count +
                 ", color='" + color + '\'' +
                 ", size=" + size +
                 ", discount='" + discount + '\'' +
                 ", gender='" + gender + '\'' +
                 ", categoryId='" + categoryId + '\'' +
-                ", id='" + id + '\'' +
                 '}';
     }
 }

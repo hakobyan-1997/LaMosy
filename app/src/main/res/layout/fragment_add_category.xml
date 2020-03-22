@@ -4,9 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="30dp"
-    tools:context=".fragments.AddCategoryFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".fragments.AddCategoryFragment">
 
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="@dimen/marginLayoutSize"
+        android:src="@drawable/default_image" />
 
     <EditText
         android:id="@+id/category_name"
@@ -14,41 +21,36 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/marginLayoutSize"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/background_edit_text"
+        android:hint="@string/category_name"
         android:padding="@dimen/paddingSize"
-        android:textColorHint="@color/md_light_blue_50"
-        android:textColor="@color/md_light_blue_50"
-        android:textSize="@dimen/mediumTextSize"
-        android:hint="@string/category_name" />
+        android:textColor="@color/textColor"
+        android:textSize="@dimen/mediumTextSize" />
 
-    <ImageView
-        android:id="@+id/image"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/default_image"
-        android:layout_marginBottom="100dp"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
-    <Button
-        android:id="@+id/cancel_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginRight="10dp"
-        android:textColor="@color/md_light_blue_50"
-        android:text="@string/cancel"
-        android:background="@drawable/background_button"/>
-    <Button
-        android:id="@+id/add_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/md_light_blue_50"
-        android:layout_weight="1"
-        android:text="@string/add"
-        android:background="@drawable/background_button"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_button"
+            android:text="@string/cancel"
+            android:textColor="@color/textColor" />
+
+        <Button
+            android:id="@+id/add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_button"
+            android:text="@string/add"
+            android:textColor="@color/textColor" />
+    </LinearLayout>
 </LinearLayout>

@@ -6,11 +6,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -26,13 +25,15 @@ import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.adapters.UserCategoryAdapter;
 import ani.am.e_commerce.db.entity.Category;
+import ani.am.e_commerce.db.entity.Product;
+import ani.am.e_commerce.interfaces.CustomOnClickListener;
 import ani.am.e_commerce.view_models.CategoryViewModel;
 import ani.am.e_commerce.view_models.UserViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements CustomOnClickListener {
     private View view;
     private Context context;
     private UserCategoryAdapter adapter;
@@ -93,28 +94,14 @@ public class ProfileFragment extends Fragment {
 
     private void createArrayList(List<Category> list) {
         Log.d("Tag", "userCategory " + list.toString());
-        adapter = new UserCategoryAdapter(list);
+        adapter = new UserCategoryAdapter(list,this);
         categoryRv.setAdapter(adapter);
-        categoryRv.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        categoryRv.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation);
         categoryRv.setLayoutAnimation(animation);
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case 1:
-                editCategory(item.getGroupId());
-                return true;
-            case 2:
-                removeCategory(item.getGroupId());
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
-
-    private void editCategory(int position) {
+    public void editCategory(int position) {
         Gson gson = new Gson();
         String json = gson.toJson(categoryList.get(position));
         Fragment fragment = new EditCategoryFragment();
@@ -123,11 +110,21 @@ public class ProfileFragment extends Fragment {
                 .addToBackStack(null).commit();
     }
 
-    private void removeCategory(int position) {
+    public void removeCategory(int position) {
         Log.d("Tag", "position " + position);
         Log.d("Tag", "categoryList size " + categoryList.size());
         Category category = categoryList.get(position);
         Global.categoryViewModel.deleteCategory(category);
         getCategoryList();
+    }
+
+    @Override
+    public void onClickListener(int position) {
+
+    }
+
+    @Override
+    public void editProduct(Product product) {
+
     }
 }

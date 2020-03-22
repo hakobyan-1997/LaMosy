@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginLeft="@dimen/marginLeftSize"
+    android:layout_marginStart="@dimen/marginLeftSize"
     android:layout_marginTop="@dimen/marginTopSize"
-    android:layout_marginRight="@dimen/marginRightSize"
+    android:layout_marginEnd="@dimen/marginRightSize"
     android:layout_marginBottom="@dimen/marginBottomSize"
     android:elevation="2dp"
     android:padding="@dimen/paddingSize"
@@ -19,24 +19,47 @@
         android:layout_gravity="center"
         android:gravity="center">
 
-        <ImageView
+        <com.yayandroid.parallaxrecyclerview.ParallaxImageView
             android:id="@+id/category_image"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_marginBottom="@dimen/marginBottomSize"
-            android:src="@color/md_cyan_50" />
+            android:layout_height="@dimen/item_size"
+            android:src="@color/md_cyan_50"
+            app:center_crop="true" />
 
         <TextView
             android:id="@id/category_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/category_image"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/light_gray"
+            android:fontFamily="@font/arbutus_slab"
+            android:paddingTop="@dimen/marginRightSize"
+            android:paddingBottom="@dimen/marginRightSize"
             android:text="@string/name"
             android:textAlignment="center"
-            android:textSize="@dimen/bigTextSize"
-            android:textStyle="bold" />
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:textSize="20dp" />
+
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="2dp"
+            android:src="@drawable/ic_close"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/delete"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="2dp"
+            android:src="@drawable/ic_edit"
+            android:visibility="visible" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

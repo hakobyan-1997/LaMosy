@@ -39,7 +39,7 @@ import javax.inject.Inject;
 import ani.am.e_commerce.Constants;
 import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.activites.BaseActivity;
+import ani.am.e_commerce.activities.BaseActivity;
 import ani.am.e_commerce.view_models.CategoryViewModel;
 import dagger.android.support.AndroidSupportInjection;
 import okhttp3.MediaType;

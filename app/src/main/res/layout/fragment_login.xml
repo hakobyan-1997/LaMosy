@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".activites.MainActivity"
+    tools:context=".activities.MainActivity"
     android:background="@drawable/background"
     android:orientation="vertical">
 
@@ -14,6 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:layout_collapseMode="pin"
+        app:title="@string/login"
         android:background="@android:color/transparent"
         android:layout_alignParentTop="true"/>
 
@@ -42,8 +43,7 @@
                 android:background="@drawable/background_edit_text"
                 android:hint="@string/user_name"
                 android:padding="@dimen/paddingSize"
-                android:textColorHint="@color/md_light_blue_50"
-                android:textColor="@color/md_light_blue_50"
+                android:textColor="@color/textColor"
                 android:textSize="@dimen/mediumTextSize" />
 
             <EditText
@@ -58,9 +58,7 @@
                 android:inputType="textPassword"
                 android:padding="@dimen/paddingSize"
                 android:textSize="@dimen/mediumTextSize"
-                android:textColorHint="@color/md_light_blue_50"
-                android:textColor="@color/md_light_blue_50"
-                />
+                android:textColor="@color/textColor" />
 
             <Button
                 android:id="@+id/login_btn"
@@ -71,7 +69,7 @@
                 android:layout_marginBottom="@dimen/marginLayoutSize"
                 android:background="@drawable/background_button"
                 android:text="@string/login"
-                android:textColor="@color/md_light_blue_50"
+                android:textColor="@color/textColor"
                 android:textAllCaps="false"
                 android:textSize="@dimen/standardTextSize" />
 

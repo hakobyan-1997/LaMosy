@@ -3,18 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_light_blue_50">
+    android:background="@color/white">
 <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/marginLayoutSize"
-        android:layout_marginLeft="@dimen/marginTopSize"
-        android:layout_marginRight="@dimen/marginTopSize"
+        android:layout_margin="@dimen/marginTopSize"
         android:orientation="vertical"
         tools:context=".fragments.AddProductFragment">
+
+        <ImageView
+            android:id="@+id/product_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="@dimen/marginLayoutSize"
+            android:layout_marginBottom="@dimen/marginLayoutSize"
+            android:src="@drawable/default_image" />
 
         <EditText
             android:id="@+id/product_name_et"
@@ -22,8 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/marginBottomSize"
             android:background="@drawable/background_edit_text"
-            android:textColorHint="@color/md_light_blue_50"
-            android:textColor="@color/md_light_blue_50"
+            android:textColor="@color/textColor"
             android:hint="@string/product_name"
             android:padding="@dimen/paddingSize"
             android:textSize="@dimen/standardTextSize" />
@@ -34,8 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/marginBottomSize"
             android:background="@drawable/background_edit_text"
-            android:textColorHint="@color/md_light_blue_50"
-            android:textColor="@color/md_light_blue_50"
+            android:textColor="@color/textColor"
             android:hint="@string/price"
             android:inputType="number"
             android:padding="@dimen/paddingSize"
@@ -47,21 +51,23 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/marginBottomSize"
             android:background="@drawable/background_edit_text"
-            android:textColorHint="@color/md_light_blue_50"
-            android:textColor="@color/md_light_blue_50"
+            android:textColor="@color/textColor"
             android:hint="@string/size"
             android:inputType="number"
             android:padding="@dimen/paddingSize"
             android:textSize="@dimen/standardTextSize" />
-
-        <ImageView
-            android:id="@+id/product_image_view"
+        <EditText
+            android:id="@+id/product_count_et"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="@dimen/marginLayoutSize"
-            android:layout_marginBottom="@dimen/marginLayoutSize"
-            android:src="@drawable/default_image"
-            />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/marginBottomSize"
+            android:background="@drawable/background_edit_text"
+            android:textColor="@color/textColor"
+            android:hint="@string/count"
+            android:inputType="number"
+            android:padding="@dimen/paddingSize"
+            android:textSize="@dimen/standardTextSize" />
+
 
         <EditText
             android:id="@+id/product_description_et"
@@ -69,8 +75,7 @@
             android:layout_height="100dp"
             android:layout_marginBottom="@dimen/marginBottomSize"
             android:background="@drawable/background_edit_text"
-            android:textColorHint="@color/md_light_blue_50"
-            android:textColor="@color/md_light_blue_50"
+            android:textColor="@color/textColor"
             android:hint="@string/description"
             android:padding="@dimen/paddingSize"
             android:textAlignment="center"
@@ -90,8 +95,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/background_button"
-                android:textColorHint="@color/md_light_blue_50"
-                android:textColor="@color/md_light_blue_50"
+                android:textColor="@color/textColor"
                 android:text="@string/cancel"
                 android:textAllCaps="false" />
 
@@ -103,8 +107,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/background_button"
                 android:text="@string/add"
-                android:textColorHint="@color/md_light_blue_50"
-                android:textColor="@color/md_light_blue_50"
+                android:textColor="@color/textColor"
                 android:textAllCaps="false" />
         </LinearLayout>
     </LinearLayout>

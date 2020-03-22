@@ -1,57 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E1F5FE</color>
+    <color name="colorPrimary">#81D4fA</color>
     <color name="colorPrimaryDark">#0288D1</color>
     <color name="colorAccent">#0277BD</color>
     <color name="white">#FFFFFF</color>
-
-    <!--reds-->
+    <color name="light_gray">#66C5C5C5</color>
+    <color name="textColor">#757474</color>
     <color name="md_red_500">#F44336</color>
-
-    <!-- pinks -->
-
-    <!-- purples -->
-
-    <!-- deep purples -->
-
-    <!-- indigo -->
-
-    <!--blue-->
-
-    <!-- light blue-->
     <color name="md_light_blue_50">#E1F5FE</color>
     <color name="md_light_blue_200">#81D4fA</color>
     <color name="md_light_blue_300">#4fC3F7</color>
     <color name="md_light_blue_400">#29B6FC</color>
     <color name="md_light_blue_600">#039BE5</color>
     <color name="md_light_blue_900">#01579B</color>
-
-    <!-- cyan -->
     <color name="md_cyan_50">#E0F7FA</color>
-
-    <!-- teal -->
-
-    <!-- green -->
-
-    <!--light green-->
-
-    <!-- lime-->
-
-    <!--yellow -->
     <color name="md_yellow_50">#FFFDE7</color>
     <color name="md_yellow_700">#FBC02D</color>
-
-    <!--amber-->
-
-    <!--orange-->
-
-    <!--deep orange-->
-
-    <!--brown -->
-
-    <!--grey-->
     <color name="md_white_1000">#ffffff</color>
-
-    <!--blue grey-->
-
 </resources>
