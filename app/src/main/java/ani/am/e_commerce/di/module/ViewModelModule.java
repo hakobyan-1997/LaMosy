@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import ani.am.e_commerce.di.key.ViewModelKey;
 import ani.am.e_commerce.view_models.CategoryViewModel;
 import ani.am.e_commerce.view_models.FactoryViewModel;
+import ani.am.e_commerce.view_models.OrderViewModel;
 import ani.am.e_commerce.view_models.ProductViewModel;
 import ani.am.e_commerce.view_models.UserViewModel;
 import dagger.Binds;
@@ -29,6 +30,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ProductViewModel.class)
     abstract  ViewModel bindproductViewModel(ProductViewModel productViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(OrderViewModel.class)
+    abstract  ViewModel bindOrderViewModel(OrderViewModel orderViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(FactoryViewModel factory);

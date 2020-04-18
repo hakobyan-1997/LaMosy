@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,15 +28,19 @@ import ani.am.e_commerce.activities.UserProductsActivity;
 import ani.am.e_commerce.db.entity.Product;
 import ani.am.e_commerce.interfaces.CustomOnClickListener;
 
+import static ani.am.e_commerce.Constants.BASE_URL;
+
 public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.ViewHolder> {
     private List<Product> productsList;
     private Context context;
     private View view;
+    private boolean isUser;
     private ViewHolder viewHolder;
     private CustomOnClickListener customOnClickListener;
 
-    public UserProductAdapter(List<Product> list, CustomOnClickListener customOnClickListener) {
-        productsList = list;
+    public UserProductAdapter(List<Product> list, CustomOnClickListener customOnClickListener,boolean isUser) {
+        this.productsList = list;
+        this.isUser = isUser;
         this.customOnClickListener = customOnClickListener;
     }
 
@@ -45,10 +50,12 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         final ImageView image;
         final ImageView delete;
         final ImageView edit;
+        final RelativeLayout contentLayout;
         final ImageView stars[] = new ImageView[5];
 
         public ViewHolder(View itemView) {
             super(itemView);
+            contentLayout = itemView.findViewById(R.id.content_layout);
             name = itemView.findViewById(R.id.product_name);
             image = itemView.findViewById(R.id.product_image);
             price = itemView.findViewById(R.id.product_price);
@@ -59,8 +66,13 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
             stars[2] = itemView.findViewById(R.id.star_3);
             stars[3] = itemView.findViewById(R.id.star_4);
             stars[4] = itemView.findViewById(R.id.star_5);
-            delete.setVisibility(View.VISIBLE);
-            edit.setVisibility(View.VISIBLE);
+            if(isUser) {
+                delete.setVisibility(View.VISIBLE);
+                edit.setVisibility(View.VISIBLE);
+            }else{
+                delete.setVisibility(View.GONE);
+                edit.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -71,32 +83,38 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         LayoutInflater inflater = LayoutInflater.from(context);
         view = inflater.inflate(R.layout.item_product, parent, false);
         viewHolder = new ViewHolder(view);
-        final Animation animShake = AnimationUtils.loadAnimation(context, R.anim.shake_infinite);
-        viewHolder.delete.setAnimation(animShake);
-        viewHolder.edit.setAnimation(animShake);
+        if(isUser) {
+            final Animation animShake = AnimationUtils.loadAnimation(context, R.anim.shake_infinite);
+            viewHolder.delete.setAnimation(animShake);
+            viewHolder.edit.setAnimation(animShake);
+        }
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull UserProductAdapter.ViewHolder viewHolder, int position) {
         Product product = productsList.get(position);
-        TextView textView = viewHolder.name;
-        textView.setText(product.getName());
-        viewHolder.price.setText(context.getString(R.string.price).concat(" ").concat(String.valueOf(product.getPrice())).concat("$"));
+        viewHolder.name.setText(product.getName());
+        viewHolder.price.setText((String.valueOf(product.getPrice())).concat("$"));
+        viewHolder.contentLayout.setOnClickListener(v -> customOnClickListener.onClickListener(position));
         URL url = null;
         Log.d("Tag", product.getPicture());
         if (product.getPicture() != " ") {
-            Glide.with(context).load("http://5.9.1.58:3000/" + product.getPicture())
+            String path = BASE_URL + "/" + product.getPicture();
+            path = path.replace("\\", "/");
+            Glide.with(context).load(path)
                     .into(viewHolder.image);
         }
         setStarsColorFilter(position);
 
-        viewHolder.delete.setOnClickListener(v -> {
-            showDeleteDialog(product, position);
-        });
-        viewHolder.edit.setOnClickListener(view1 -> {
-            customOnClickListener.editProduct(product);
-        });
+        if(isUser) {
+            viewHolder.delete.setOnClickListener(v -> {
+                showDeleteDialog(product, position);
+            });
+            viewHolder.edit.setOnClickListener(view1 -> {
+                customOnClickListener.editProduct(product);
+            });
+        }
     }
 
     private void setStarsColorFilter(int position) {
@@ -130,7 +148,7 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteProdut(product);
+                deleteProduct(product);
                 productsList.remove(position);
                 dialog.dismiss();
             }
@@ -138,7 +156,7 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         dialog.show();
     }
 
-    private void deleteProdut(Product product) {
+    private void deleteProduct(Product product) {
         ((UserProductsActivity) context).deleteProduct(product);
     }
 

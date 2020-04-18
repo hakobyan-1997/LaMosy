@@ -32,19 +32,15 @@ public class CategoryViewModel extends ViewModel {
         return this.categoryList;
     }
 
-    public void deleteCategory(Category category){
+    public void deleteCategory(Category category) {
         categoryListRepo.deleteCategory(category);
     }
 
-    public LiveData<List<Product>> getProductsByCategoruId(String id){
-        return categoryListRepo.getProductsbyCategoryId(id);
-    }
-
-    public void addCategory(Map<String, RequestBody> map){
+    public void addCategory(Map<String, RequestBody> map) {
         categoryListRepo.addCategory(map);
     }
 
-    public void updateCategory(String id,Map<String, RequestBody> map){
-        categoryListRepo.updateCategory(id,map);
+    public void updateCategory(String id, Map<String, RequestBody> map) {
+        categoryListRepo.updateCategory(id, map);
     }
 }

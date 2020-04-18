@@ -51,20 +51,16 @@ public class CategoryRepository {
         return categoryDao.getAllCategories();
     }
 
-    public LiveData<List<Product>> getProductsbyCategoryId(String id) {
-        return categoryDao.getProductsByCategoryId(id);
-    }
-
     public void addCategory(Map<String, RequestBody> map) {
         String token = prefConfig.readToken("token");
-        String id = prefConfig.readToken("id");
-        Log.d("Tag", "add category " + id + "  token " + token);
+        Log.d("Tag", "add category token " + token);
         executor.execute(() ->
-                apiInterface.createCategory(id, token, map).enqueue(new Callback<JsonObject>() {
+                apiInterface.createCategory(token, map).enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.d("Tag", response.toString());
                         if (response.body() != null) {
+                            insertData(response.body().toString());
                             Log.d("Tag", response.body().toString());
                         }
 
@@ -88,7 +84,7 @@ public class CategoryRepository {
                         Log.d("Tag", response.toString());
                         if (response.body() != null) {
                             Log.d("Tag", "updateCategory " + response.body().toString());
-                            // updateData(response.body().toString());
+                            updateData(response.body().toString());
                         }
                     }
 
@@ -129,8 +125,6 @@ public class CategoryRepository {
                             categoryDao.deleteCategoryList();
                             String json = response.body().toString();
                             saveData(json);
-                         /*   List<Category> categoryList = response.body().getCategories();
-                            categoryDao.saveList(categoryList);*/
                         });
                     }
 
@@ -147,7 +141,7 @@ public class CategoryRepository {
         Log.d("Tag", "token = " + token);
         Log.d("Tag", "id = " + id);
         executor.execute(() ->
-                apiInterface.getCategories(token, id).enqueue(new Callback<JsonObject>() {
+                apiInterface.getCategories(token).enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         Log.d("Tag", "User category refreshed from network !" + response.toString());
@@ -168,37 +162,54 @@ public class CategoryRepository {
     }
 
     private void saveData(String json) {
-        Log.d("Tag", "data json " + json);
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray data = jsonObject.getJSONArray("data");
-            List<Category> categoryList = new ArrayList<>();
-            Gson gson = new Gson();
-            for (int i = 0; i < data.length(); i++) {
-                JSONObject object = data.getJSONObject(i);
-                Category category = gson.fromJson(object.toString(), Category.class);
-                categoryList.add(category);
-            }
-            Log.d("Tag", "categorylist size before save " + categoryList.size());
-            categoryDao.saveList(categoryList);
+        executor.execute(() -> {
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray data = jsonObject.getJSONArray("data");
+                List<Category> categoryList = new ArrayList<>();
+                Gson gson = new Gson();
+                for (int i = 0; i < data.length(); i++) {
+                    JSONObject object = data.getJSONObject(i);
+                    Category category = gson.fromJson(object.toString(), Category.class);
+                    categoryList.add(category);
+                }
+                categoryDao.saveList(categoryList);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void insertData(String json) {
+        executor.execute(() -> {
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONObject data = jsonObject.getJSONObject("data");
+                Gson gson = new Gson();
+                Category category = gson.fromJson(data.toString(), Category.class);
+                categoryDao.insertCategory(category);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void updateData(String json) {
-        Log.d("Tag", "data json " + json);
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            JSONObject data = jsonObject.getJSONObject("data");
-            Gson gson = new Gson();
-            Category category = gson.fromJson(data.toString(), Category.class);
-            Log.d("Tag", "updated Category " + category);
-            categoryDao.updateCategory(category);
+        executor.execute(() -> {
+            Log.d("Tag", "data json " + json);
+            try {
+                JSONObject jsonObject = new JSONObject(json);
+                JSONObject data = jsonObject.getJSONObject("data");
+                Gson gson = new Gson();
+                Category category = gson.fromJson(data.toString(), Category.class);
+                Log.d("Tag", "updated Category " + category);
+                categoryDao.updateCategory(category);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

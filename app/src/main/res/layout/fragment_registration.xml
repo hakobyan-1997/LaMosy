@@ -42,19 +42,6 @@
                 android:hint="@string/name" />
 
             <EditText
-                android:id="@+id/txt_user_name"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/marginLayoutSize"
-                android:background="@drawable/background_edit_text"
-                android:padding="@dimen/paddingSize"
-                android:textSize="@dimen/mediumTextSize"
-                android:hint="@string/user_name"
-                android:drawableEnd="@drawable/ic_person"
-                android:textColor="@color/textColor"/>
-
-            <EditText
                 android:id="@+id/txt_user_email"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"

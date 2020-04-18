@@ -35,8 +35,8 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE id = :categoryId")
     LiveData<Category> getCategoryById(String categoryId);
 
-    @Query("SELECT * FROM Product WHERE categoryId = :categoryId")
-    LiveData<List<Product>> getProductsByCategoryId(String categoryId);
+    @Insert(onConflict = REPLACE)
+    void saveProductList(List<Product> productList);
 
     @Query("SELECT * FROM Category")
     LiveData<List<Category>> getAllCategories();

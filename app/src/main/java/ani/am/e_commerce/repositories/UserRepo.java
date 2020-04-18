@@ -77,6 +77,7 @@ public class UserRepo {
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.d("Tag","login fail " + t.getMessage());
                         Toast.makeText(context, context.getString(R.string.check_internet), Toast.LENGTH_LONG).show();
                     }
                 }));
@@ -111,6 +112,7 @@ public class UserRepo {
                         if (response.isSuccessful()) {
                             prefConfig.writeLoginStatus(false);
                             prefConfig.writeName("User");
+                            prefConfig.writeEmail("Email");
                             prefConfig.writeToken("", "token");
                             prefConfig.writeToken("", "id");
                             context.startActivity(new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
@@ -132,7 +134,9 @@ public class UserRepo {
             String token = data.getString("token");
             String id = data.getString("userId");
             String name = data.getString("name");
+            String email = data.getString("email");
             prefConfig.writeName(name);
+            prefConfig.writeEmail(email);
             prefConfig.writeToken(token, "token");
             prefConfig.writeToken(id, "id");
             Intent intent = new Intent(context, BaseActivity.class);

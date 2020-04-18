@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginLeft="@dimen/marginLeftSize"
+    android:layout_marginStart="@dimen/marginLeftSize"
     android:layout_marginTop="@dimen/marginTopSize"
-    android:layout_marginRight="@dimen/marginRightSize"
+    android:layout_marginEnd="@dimen/marginRightSize"
     android:layout_marginBottom="@dimen/marginBottomSize"
     android:elevation="2dp"
     android:padding="@dimen/paddingSize"
@@ -15,7 +15,7 @@
     <RelativeLayout
         android:id="@+id/content_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="165dp"
         android:gravity="center">
 
         <ImageView
@@ -42,7 +42,9 @@
             android:id="@+id/product_view"
             android:layout_width="160dp"
             android:layout_height="160dp"
+            android:layout_centerVertical="true"
             android:elevation="5dp"
+            app:cardCornerRadius="5dp"
             app:cardUseCompatPadding="true">
 
             <ImageView
@@ -53,25 +55,10 @@
                 android:src="@color/md_cyan_50" />
         </android.support.v7.widget.CardView>
 
-        <!-- <TextView
-             android:id="@+id/product_name"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_toEndOf="@+id/product_image"
-             android:layout_toStartOf="@+id/delete"
-             android:layout_centerHorizontal="true"
-             android:singleLine="true"
-             android:paddingLeft="@dimen/marginLeftSize"
-             android:paddingRight="@dimen/marginLeftSize"
-             android:text="@string/name"
-             android:textAlignment="center"
-             android:textSize="@dimen/bigTextSize"
-             android:textStyle="bold" />-->
         <TextView
             android:id="@+id/product_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/product_price"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/marginTopSize"
@@ -89,13 +76,14 @@
             android:id="@+id/product_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/product_view"
+            android:layout_above="@+id/stars_layout"
+            android:layout_below="@+id/product_name"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/product_view"
+            android:gravity="center"
             android:paddingLeft="@dimen/marginLeftSize"
             android:paddingRight="@dimen/marginLeftSize"
-            android:textAlignment="center"
             android:textSize="@dimen/bigTextSize"
             android:textStyle="bold" />
 
@@ -114,8 +102,8 @@
             android:id="@+id/stars_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/product_view"
-            android:layout_toStartOf="@+id/product_view"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/product_view"
             android:padding="@dimen/paddingSize">
 
             <ImageView

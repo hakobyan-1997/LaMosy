@@ -4,6 +4,7 @@ import ani.am.e_commerce.fragments.AddCategoryFragment;
 import ani.am.e_commerce.fragments.AddProductFragment;
 import ani.am.e_commerce.fragments.AllCategoriesFragment;
 import ani.am.e_commerce.fragments.LoginFragment;
+import ani.am.e_commerce.fragments.OrdersFragment;
 import ani.am.e_commerce.fragments.ProfileFragment;
 import ani.am.e_commerce.fragments.RegistrationFragment;
 import dagger.Module;
@@ -23,4 +24,6 @@ public abstract class FragmentModule {
     abstract LoginFragment contributeLoginFragment();
     @ContributesAndroidInjector
     abstract RegistrationFragment contributeRegistrationFragment();
+    @ContributesAndroidInjector
+    abstract OrdersFragment contributeOrderFragment();
 }

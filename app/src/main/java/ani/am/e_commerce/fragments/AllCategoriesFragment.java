@@ -16,16 +16,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -37,8 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.intellij.lang.annotations.Language;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -48,9 +42,9 @@ import javax.inject.Inject;
 import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
 
-import ani.am.e_commerce.activities.MainActivity;
-import ani.am.e_commerce.adapters.CategoryAdapter;
+import ani.am.e_commerce.adapters.UserCategoryAdapter;
 import ani.am.e_commerce.db.entity.Category;
+import ani.am.e_commerce.db.entity.Product;
 import ani.am.e_commerce.view_models.CategoryViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,7 +62,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     private SpeechRecognizer speech = null;
     private Intent recognizerIntent;
     private ProgressBar progressBar;
-
+    private boolean isAnimated;
     private List<Category> categoryList;
 
     @Inject
@@ -76,9 +70,6 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
 
     @BindView(R.id.category_rv)
     RecyclerView rv;
-
-    public AllCategoriesFragment() {
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -102,6 +93,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     }
 
     private void configureViewModel() {
+        isAnimated = false;
         Global.categoryViewModel = ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel.class);
         Global.categoryViewModel.getCategoriesList().observe(this, categories -> updateUI(categories));
     }
@@ -202,12 +194,14 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     }
 
     private void createArrayList(List<Category> list) {
-        CategoryAdapter adapter = new CategoryAdapter(list);
+        UserCategoryAdapter adapter = new UserCategoryAdapter(list,null, false);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
-
-        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation);
-        rv.setLayoutAnimation(animation);
+        if(!isAnimated) {
+            LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation);
+            rv.setLayoutAnimation(animation);
+            isAnimated = true;
+        }
     }
 
     private void searchCategoryByName(String s) {
@@ -215,11 +209,18 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         List<Category> newList = new ArrayList<>();
         String searchableString = s.toLowerCase();
         String categoryName;
+        String productName;
         for (Category category : categoryList) {
             categoryName = category.getCategoryName().toLowerCase();
             if (searchableString.contains(categoryName) || categoryName.contains(searchableString)) {
                 newList.add(category);
-            }
+            }/*else{
+                for (Product product : category.getProducts()){
+                    productName = product.getName().toLowerCase();
+                    if (searchableString.contains(productName) || productName.contains(searchableString))
+                        newList.add(category);
+                }
+            }*/
         }
         Log.d("Tag", "newList " + newList);
         createArrayList(newList);

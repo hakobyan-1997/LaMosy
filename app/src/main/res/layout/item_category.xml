@@ -13,7 +13,7 @@
     app:cardBackgroundColor="@color/md_cyan_50"
     app:cardCornerRadius="6dp">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -23,23 +23,24 @@
             android:id="@+id/category_image"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_size"
-            android:src="@color/md_cyan_50"
-            app:center_crop="true" />
+            app:center_crop="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@id/category_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/light_gray"
-            android:fontFamily="@font/arbutus_slab"
-            android:paddingTop="@dimen/marginRightSize"
-            android:paddingBottom="@dimen/marginRightSize"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/transparent_bgColor"
+            android:fontFamily="@font/vast_shadow"
+            android:paddingTop="100dp"
             android:text="@string/name"
-            android:textAlignment="center"
+            android:gravity="center"
             android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/delete"
@@ -47,9 +48,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_margin="2dp"
+            android:layout_margin="5dp"
             android:src="@drawable/ic_close"
-            android:visibility="visible" />
+            android:tint="@color/white"
+            android:visibility="visible"
+            android:padding="5dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/transparent_background"/>
 
         <ImageView
             android:id="@+id/edit"
@@ -57,9 +63,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/delete"
             android:layout_alignParentEnd="true"
-            android:layout_margin="2dp"
+            android:layout_margin="5dp"
+            android:padding="5dp"
             android:src="@drawable/ic_edit"
-            android:visibility="visible" />
-
-    </RelativeLayout>
+            android:tint="@color/white"
+            android:visibility="visible"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/delete"
+            android:background="@drawable/transparent_background"/>
+    </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

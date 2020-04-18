@@ -48,6 +48,8 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static ani.am.e_commerce.Constants.BASE_URL;
+
 public class AddProductFragment extends Fragment implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
     private EditText nameEt, priceEt, sizeEt, countEt, descriptionEt;
     private ImageView productImageView;
@@ -113,10 +115,12 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             isUpdate = false;
             categoryId = args.getString("id");
             getActivity().setTitle(getString(R.string.addProduct));
+            addBtn.setText(getString(R.string.add));
         } else {
             isUpdate = true;
             product = (Product) args.getSerializable("product");
             getActivity().setTitle(getString(R.string.edit));
+            addBtn.setText(getString(R.string.edit));
             fillFields();
         }
 
@@ -169,14 +173,12 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         RequestBody count = RequestBody.create(MediaType.parse("text/plain"), countEt.getText().toString());
         RequestBody description = RequestBody.create(MediaType.parse("text/plain"), descriptionEt.getText().toString());
         Map<String, RequestBody> map = new HashMap<>();
-        map.put("picture\"; filename=\"" + file.getName() + "\"", mFile);
-        map.put("name", name);
-        map.put("price", price);
-        map.put("size", size);
-        map.put("stars", size);
-        map.put("count", count);
-        map.put("description", description);
-        Log.d("Tag", categoryId + " " + size + " " + price + " " + name);
+        map.put("productPicture\"; filename=\"" + file.getName() + "\"", mFile);
+        map.put("productName", name);
+        map.put("productPrice", price);
+        map.put("productStars", size);
+        map.put("productItemsCount", count);
+        map.put("productDescription", description);
         productViewModel.addProduct(categoryId, map);
         Global.hideKeyboard(getActivity());
         getActivity().onBackPressed();
@@ -312,10 +314,12 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         sizeEt.setText(String.valueOf(product.getSize()));
         countEt.setText(String.valueOf(product.getCount()));
         descriptionEt.setText(product.getDescription());
+        String path = BASE_URL + "/" + product.getPicture();
+        path = path.replace("\\", "/");
         Glide.with(context.getApplicationContext())
-                .load("http://5.9.1.58:3000/" + product.getPicture())
+                .load(path)
                 .into(productImageView);
-        uri = Uri.parse("http://5.9.1.58:3000/" + product.getPicture());
+        uri = Uri.parse(path);
     }
 
     @Override

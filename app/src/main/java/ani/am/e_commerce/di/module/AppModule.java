@@ -14,8 +14,10 @@ import javax.inject.Singleton;
 import ani.am.e_commerce.api.ApiInterface;
 import ani.am.e_commerce.db.EcommerceDb;
 import ani.am.e_commerce.db.dao.CategoryDao;
+import ani.am.e_commerce.db.dao.OrderDao;
 import ani.am.e_commerce.db.dao.ProductDao;
 import ani.am.e_commerce.repositories.CategoryRepository;
+import ani.am.e_commerce.repositories.OrderRepository;
 import ani.am.e_commerce.repositories.ProductRepository;
 import ani.am.e_commerce.repositories.UserRepo;
 import dagger.Module;
@@ -49,6 +51,12 @@ public class AppModule {
         return  database.productDao();
     }
 
+    @Provides
+    @Singleton
+    OrderDao provdeOrderDao(EcommerceDb database){
+        return  database.orderDao();
+    }
+
     // --- REPOSITORY INJECTION ---
 
     @Provides
@@ -72,6 +80,12 @@ public class AppModule {
     @Singleton
     UserRepo provideUserRepo(ApiInterface apiInterface, Executor executor){
         return new UserRepo(apiInterface,executor);
+    }
+
+    @Provides
+    @Singleton
+    OrderRepository provideOrderRepo(ApiInterface apiInterface, OrderDao orderDao, Executor executor){
+        return new OrderRepository(apiInterface,orderDao,executor);
     }
     // --- NETWORK INJECTION ---
 

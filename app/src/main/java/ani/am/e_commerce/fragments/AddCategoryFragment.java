@@ -25,6 +25,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -40,11 +42,14 @@ import ani.am.e_commerce.Constants;
 import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.activities.BaseActivity;
+import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.view_models.CategoryViewModel;
 import dagger.android.support.AndroidSupportInjection;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static ani.am.e_commerce.Constants.BASE_URL;
 
 public class AddCategoryFragment extends Fragment implements View.OnClickListener, EasyPermissions.PermissionCallbacks {
     private View view;
@@ -53,9 +58,32 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
     private Uri uri;
     private Button add;
     private Context context;
+    private Category category;
+    private boolean isUpdate;
     @Inject
     ViewModelProvider.Factory viewModelProvider;
     CategoryViewModel categoryViewModel;
+
+    public static AddCategoryFragment newInstance(String json) {
+        Bundle bundle = new Bundle();
+        bundle.putString("category", json);
+        AddCategoryFragment fragment = new AddCategoryFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    private void readBundle(Bundle bundle) {
+        if (bundle != null) {
+            String json = bundle.getString("category");
+            Gson gson = new Gson();
+            category = gson.fromJson(json, Category.class);
+            isUpdate = true;
+            getActivity().setTitle(getString(R.string.edit));
+        } else {
+            isUpdate = false;
+            getActivity().setTitle(getString(R.string.addCategory));
+        }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -67,7 +95,6 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_add_category, container, false);
-        getActivity().setTitle(getString(R.string.addCategory));
         init();
         return view;
     }
@@ -78,10 +105,28 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
         categoryImageView.setOnClickListener(this);
         add = view.findViewById(R.id.add_btn);
         Button cancel = view.findViewById(R.id.cancel_btn);
-
         cancel.setOnClickListener(this);
+        readBundle(getArguments());
+        if (isUpdate) {
+            add.setText(getText(R.string.edit));
+            fillFields();
+        } else {
+            add.setText(getText(R.string.add));
+        }
         if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
             EasyPermissions.requestPermissions(this, getString(R.string.read_file), Constants.READ_REQUEST_CODE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    private void fillFields() {
+        categoryName.setText(category.getCategoryName());
+        if (category.getCategoryPicture() != " ") {
+            String path = BASE_URL + "/" + category.getCategoryPicture();
+            path = path.replace("\\", "/");
+            Glide.with(this).load(path)
+                    .into(categoryImageView);
+            uri = Uri.parse(path);
+        }
+        Log.d("Tag", "Uri " + uri);
     }
 
     @Override
@@ -97,7 +142,10 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
                 choosePhoto();
                 break;
             case R.id.add_btn:
-                addCategory();
+                if (isUpdate)
+                    editCategory();
+                else
+                    addCategory();
                 break;
             case R.id.cancel_btn:
                 ((BaseActivity) getActivity()).onBackPressed();
@@ -121,10 +169,28 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
         RequestBody mFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), categoryName.getText().toString());
         Map<String, RequestBody> map = new HashMap<>();
-        map.put("categoryPicture\"; filename=\"" + file.getName() + "\"", mFile);
-        map.put("categoryName", name);
+        map.put("productCategoryImage\"; filename=\"" + file.getName() + "\"", mFile);
+        map.put("productCategoryName", name);
         categoryViewModel.addCategory(map);
         ((BaseActivity) getActivity()).onBackPressed();
+    }
+
+    private void editCategory() {
+        if (!verifyFields()) {
+            Toast.makeText(context, context.getString(R.string.change_fields), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String filePath = Global.getRealPathFromURIPath(uri, getActivity());
+        File file = new File(filePath);
+        RequestBody mFile = RequestBody.create(MediaType.parse("image/jpeg"), file);
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), categoryName.getText().toString());
+        String id = category.getId();
+        Map<String, RequestBody> map = new HashMap<>();
+        map.put("categoryPicture\"; filename=\"" + file.getName() + "\"", mFile);
+        map.put("categoryName", name);
+        if (Global.categoryViewModel != null)
+            Global.categoryViewModel.updateCategory(id, map);
+        getActivity().onBackPressed();
     }
 
     private void openCropActivity(Uri sourceUri, Uri destinationUri) {

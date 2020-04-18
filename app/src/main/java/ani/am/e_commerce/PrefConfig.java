@@ -51,6 +51,16 @@ public class PrefConfig {
         return sharedPreferences.getString(context.getString(R.string.pref_user_name),"User");
     }
 
+    public void writeEmail(String name){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.pref_user_email),name);
+        editor.commit();
+    }
+
+    public String readEmail(){
+        return sharedPreferences.getString(context.getString(R.string.pref_user_email),"Email");
+    }
+
     public void writeToken(String token, String key){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key,token);

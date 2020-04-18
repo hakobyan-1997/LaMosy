@@ -12,9 +12,14 @@
             android:icon="@drawable/ic_person">
         </item>
         <item
-            android:id="@+id/addCategory"
-            android:title="@string/addCategory"
-            android:icon="@drawable/ic_add_category">
+            android:id="@+id/shopping_history"
+            android:title="@string/my_shopping_history"
+            android:icon="@drawable/ic_shopping_basket">
+        </item>
+        <item
+            android:id="@+id/orders"
+            android:title="@string/orders"
+            android:icon="@drawable/ic_order">
         </item>
         <item
             android:id="@+id/settings"

@@ -4,6 +4,7 @@
     <string name="pref_file">ani.am.preference_file</string>
     <string name="pref_login_status">ani.am.preference_login_status</string>
     <string name="pref_user_name">ani.am.preference_user_name</string>
+    <string name="pref_user_email">ani.am.preference_user_email</string>
 
     <string name="user_name">Օգտագործողի անուն</string>
     <string name="user_pass">Գաղտնաբառ</string>
@@ -23,6 +24,9 @@
 
     <string name="home">Տուն</string>
     <string name="my_profile">Իմ էջը</string>
+    <string name="my_shopping_history">Իմ գնումների պատմությունը</string>
+    <string name="orders">Պատվերներ</string>
+    <string name="order">Պատվեր</string>
     <string name="settings">Կարգավորումներ</string>
     <string name="addCategory">Ավելացնել բաժին</string>
     <string name="logout">Դուրս գալ</string>
@@ -46,6 +50,9 @@
     <string name="addProduct">Ավելացնել Ապրանք</string>
     <string name="product_name">Ապրանքի անվանումը</string>
     <string name="price">Գինը</string>
+    <string name="total">Ընդհանուր</string>
+    <string name="delivery_date">Առաքման ամսաթիվ</string>
+    <string name="quantity">Քանակ</string>
     <string name="description">Նկարագրություն</string>
     <string name="size">Չափ</string>
     <string name="count">Քանակ</string>
@@ -56,7 +63,7 @@
 
     <string name="english">Անգլերեն</string>
     <string name="armenian">Հայերեն</string>
-    <string name="label_buy_now">Գնել հիմա</string>
+    <string name="label_buy_now">Պատվիրել հիմա</string>
     <string name="card_data">Քարտի Տվյալները</string>
 
     <string name="audio_recording_error">Ձայնագրման սխալ</string>
@@ -69,4 +76,11 @@
     <string name="error_from_server">Սերվերում սխալ կա</string>
     <string name="no_speech_input">Խոսքի մուտքագրում չկա</string>
     <string name="didnt_understand">Չի հասկացվում Ձեր խոսքը, խնդրում ենք կրկին փորձել:</string>
+
+    <string name="buyer_info">Տեղեկություններ գնորդի մասին</string>
+    <string name="country">Երկիր</string>
+    <string name="city">Քաղաք</string>
+    <string name="region">Մարզ</string>
+    <string name="address">Հասցե</string>
+    <string name="phone">Հեռախոս</string>
 </resources>

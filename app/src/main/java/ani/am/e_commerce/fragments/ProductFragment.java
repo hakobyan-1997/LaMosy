@@ -18,7 +18,10 @@ import com.bumptech.glide.Glide;
 
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.activities.CardFormActivity;
+import ani.am.e_commerce.activities.OrderActivity;
 import ani.am.e_commerce.db.entity.Product;
+
+import static ani.am.e_commerce.Constants.BASE_URL;
 
 public class ProductFragment extends Fragment {
     private View view;
@@ -66,8 +69,10 @@ public class ProductFragment extends Fragment {
         }
         if (product.getPicture() != null) {
             ImageView prudImgView = view.findViewById(R.id.product_image_view);
+            String path = BASE_URL + "/" + product.getPicture();
+            path = path.replace("\\", "/");
             Glide.with(context)
-                    .load("http://5.9.1.58:3000/" + product.getPicture())
+                    .load(path)
                     .into(prudImgView);
         }
         TextView priceTv = view.findViewById(R.id.price_tv);
@@ -76,7 +81,8 @@ public class ProductFragment extends Fragment {
 
         FloatingActionButton buy = view.findViewById(R.id.btnBuy);
         buy.setOnClickListener(view1 -> {
-            Intent intent = new Intent(context, CardFormActivity.class);
+            Intent intent = new Intent(context, OrderActivity.class);
+            intent.putExtra("product",product);
             context.startActivity(intent);
         });
     }

@@ -10,13 +10,9 @@ public class User {
     @SerializedName("name")
     @Expose
     private String name;
-
     @SerializedName("userId")
     @Expose
     private String id;
-    @SerializedName("username")
-    @Expose
-    private String username;
     @SerializedName("email")
     @Expose
     private String email;
@@ -25,17 +21,16 @@ public class User {
     private String password;
 
 
-    public User(String name, String username, String email, String password) {
+    public User(String name, String email, String password) {
         this.token = token;
         this.name = name;
         this.id = id;
-        this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(String email, String password) {
+        this.email = email;
         this.password = password;
     }
 
@@ -45,10 +40,6 @@ public class User {
 
     public String getToken() {
         return token;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getEmail() {
@@ -69,7 +60,6 @@ public class User {
                 "token='" + token + '\'' +
                 ", name='" + name + '\'' +
                 ", id='" + id + '\'' +
-                ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';

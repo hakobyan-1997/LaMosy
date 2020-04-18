@@ -6,6 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverter;
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -14,30 +15,45 @@ import java.io.Serializable;
 public class Product implements Serializable {
     @NonNull
     @PrimaryKey
-    @SerializedName("id")
+    @SerializedName("productId")
+    @Expose
     private String id;
-    @SerializedName("name")
+    @SerializedName("userId")
+    @Expose
+    private String userId;
+    @SerializedName("productName")
+    @Expose
     private String name;
-    @SerializedName("picture")
+    @SerializedName("productPicture")
+    @Expose
     private String picture;
-    @SerializedName("price")
+    @SerializedName("productPrice")
+    @Expose
     private int price;
-    @SerializedName("description")
+    @SerializedName("productDescription")
+    @Expose
     private String description;
-    @SerializedName("stars")
+    @SerializedName("productStars")
+    @Expose
     private int stars;
-    @SerializedName("count")
+    @SerializedName("productItemsCount")
+    @Expose
     private int count;
-    @SerializedName("color")
+    @SerializedName("productColor")
+    @Expose
     private String color;
-    @SerializedName("size")
+    @SerializedName("productSize")
+    @Expose
     private int size;
-    @SerializedName("discount")
+    @SerializedName("productDiscount")
+    @Expose
     private String discount;
-    @SerializedName("gender")
+    @SerializedName("productModelGender")
+    @Expose
     private String gender;
     @ForeignKey(entity = Category.class,parentColumns = "id", childColumns = "categoryId")
-    @SerializedName("categoryId")
+    @SerializedName("productCategoryId")
+    @Expose
     private String categoryId;
 
     @TypeConverter
@@ -46,6 +62,14 @@ public class Product implements Serializable {
     }
 
     public Product() {
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -159,6 +183,7 @@ public class Product implements Serializable {
                 ", discount='" + discount + '\'' +
                 ", gender='" + gender + '\'' +
                 ", categoryId='" + categoryId + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

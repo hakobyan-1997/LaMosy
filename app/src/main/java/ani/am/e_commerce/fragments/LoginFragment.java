@@ -27,7 +27,7 @@ import dagger.android.support.AndroidSupportInjection;
 public class LoginFragment extends Fragment implements View.OnClickListener {
     OnLoginFormActivityListener loginFormActivityListener;
     private Context context;
-    private EditText userName, userPassword;
+    private EditText email, userPassword;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     private UserViewModel userViewModel;
@@ -66,7 +66,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         regText.setOnClickListener(this);
         Button loginBtn = view.findViewById(R.id.login_btn);
         loginBtn.setOnClickListener(this);
-        userName = view.findViewById(R.id.user_name);
+        email = view.findViewById(R.id.user_email);
         userPassword = view.findViewById(R.id.user_pass);
     }
 
@@ -101,9 +101,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     }
 
     private void performLogin() {
-        String username = userName.getText().toString();
+        String emailStr = email.getText().toString();
         String userpassword = userPassword.getText().toString();
-        User user = new User(username, userpassword);
+        User user = new User(emailStr, userpassword);
         userViewModel.login(context, user);
     }
 

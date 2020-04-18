@@ -5,6 +5,7 @@
     <color name="colorAccent">#0277BD</color>
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#66C5C5C5</color>
+    <color name="transparent_bgColor">#33757474</color>
     <color name="textColor">#757474</color>
     <color name="md_red_500">#F44336</color>
     <color name="md_light_blue_50">#E1F5FE</color>

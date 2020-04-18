@@ -18,6 +18,9 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 public interface ProductDao {
 
     @Insert(onConflict = REPLACE)
+    void saveProductList(List<Product> productList);
+
+    @Insert(onConflict = REPLACE)
     void insertProduct(Product product);
 
     @Update
@@ -29,5 +32,10 @@ public interface ProductDao {
     @Query("SELECT * FROM Product WHERE id = :productId")
     LiveData<Product> getProductById(String productId);
 
+    @Query("SELECT * FROM Product")
+    LiveData<List<Product>> getAllProducts();
+
+    @Query("SELECT * FROM Product WHERE categoryId = :categoryId")
+    LiveData<List<Product>> getAllProductsByCategoryId(String categoryId);
 }
 

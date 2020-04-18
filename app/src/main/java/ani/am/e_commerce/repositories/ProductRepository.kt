@@ -1,5 +1,6 @@
 package ani.am.e_commerce.repositories
 
+import android.arch.lifecycle.LiveData
 import android.util.Log
 import ani.am.e_commerce.activities.MainActivity
 import ani.am.e_commerce.api.ApiInterface
@@ -8,6 +9,7 @@ import ani.am.e_commerce.db.entity.Product
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.RequestBody
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -22,15 +24,18 @@ class ProductRepository(
         private val productDao: ProductDao,
         private val executor: Executor) {
 
-    fun addProduct(id: String, map: Map<String?, RequestBody?>?) {
+    fun addProduct(id: String, map: Map<String, RequestBody>) {
         val token = MainActivity.prefConfig.readToken("token")
-        Log.d("Tag", "add category $id  token $token")
+        Log.d("Tag", "add product $id  token $token")
         executor.execute {
             apiInterface.createProduct(id, token, map).enqueue(object : Callback<JsonObject?> {
                 override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
-                    Log.d("Tag", response.toString())
-                    if (response.body() != null) {
-                        Log.d("Tag", response.body().toString())
+                    executor.execute {
+                        Log.d("Tag", response.toString())
+                        if (response.body() != null) {
+                            Log.d("Tag", response.body().toString())
+                            saveData(response.body().toString())
+                        }
                     }
                 }
 
@@ -39,7 +44,7 @@ class ProductRepository(
         }
     }
 
-    fun updateProduct(id: String, map: Map<String?, RequestBody?>) {
+    fun updateProduct(id: String, map: Map<String, RequestBody>) {
         val token = MainActivity.prefConfig.readToken("token")
         Log.d("Tag", "update product $id  token $token")
         Log.d("Tag", "update product $map")
@@ -61,16 +66,18 @@ class ProductRepository(
     }
 
     private fun saveData(json: String) {
-        Log.d("Tag", "data json $json")
-        try {
-            val jsonObject = JSONObject(json)
-            val data = jsonObject.getJSONObject("data")
-            val gson = Gson()
-            val product = gson.fromJson(data.toString(), Product::class.java)
-            Log.d("Tag", "updated Product $product")
-            productDao.insertProduct(product)
-        } catch (e: JSONException) {
-            e.printStackTrace()
+        executor.execute {
+            Log.d("Tag", "data json $json")
+            try {
+                val jsonObject = JSONObject(json)
+                val data = jsonObject.getJSONObject("data")
+                val gson = Gson()
+                val product = gson.fromJson(data.toString(), Product::class.java)
+                Log.d("Tag", "updated Product $product")
+                productDao.insertProduct(product)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -87,4 +94,49 @@ class ProductRepository(
             productDao.deleteProduct(product)
         }
     }
+
+    fun getAllProductsByCategoryId(id: String): LiveData<List<Product>> {
+        refreshProductsListByCategoryId(id)
+        return productDao.getAllProductsByCategoryId(id)
+    }
+
+    fun refreshProductsListByCategoryId(categoryId: String) {
+        val token = MainActivity.prefConfig.readToken("token")
+        executor.execute {
+            apiInterface.getAllProductByCategoryId(categoryId, token).enqueue(object : Callback<JsonObject?> {
+                override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+                    Log.d("Tag", "refreshProductsListByCategoryId $response.toString()")
+                    if (response.body() != null) {
+                        Log.d("Tag", response.body().toString())
+                        saveProductsList(response.body().toString())
+                    }
+                }
+
+                override fun onFailure(call: Call<JsonObject?>, t: Throwable) {}
+            })
+        }
+    }
+
+    fun saveProductsList(json: String) {
+        val listProduct = arrayListOf<Product>()
+        executor.execute {
+            Log.d("Tag", "data json $json")
+            val jsonObject = JSONObject(json)
+            val data = jsonObject.getJSONArray("data")
+            try {
+                for (i in 0..data.length() - 1) {
+                    val productObject = data.getJSONObject(i)
+                    val gson = Gson()
+                    val product = gson.fromJson(productObject.toString(), Product::class.java)
+                    listProduct.add(product)
+                }
+
+                Log.d("Tag", "updated Product $listProduct")
+                productDao.saveProductList(listProduct)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 }

@@ -27,4 +27,20 @@ public class ProductConverter {
         Gson gson = new Gson();
         return gson.toJson(products);
     }
+
+    @TypeConverter
+    public static Product storedStringToProduct(String data) {
+        Gson gson = new Gson();
+        if (data == null) {
+            return new Product();
+        }
+        Type listType = new TypeToken<Product>() {}.getType();
+        return gson.fromJson(data, listType);
+    }
+
+    @TypeConverter
+    public static String myObjectToStoredString(Product product) {
+        Gson gson = new Gson();
+        return gson.toJson(product);
+    }
 }
