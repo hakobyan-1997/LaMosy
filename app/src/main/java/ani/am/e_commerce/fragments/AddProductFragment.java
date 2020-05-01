@@ -198,15 +198,16 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
         RequestBody count = RequestBody.create(MediaType.parse("text/plain"), countEt.getText().toString());
         RequestBody description = RequestBody.create(MediaType.parse("text/plain"), descriptionEt.getText().toString());
         Map<String, RequestBody> map = new HashMap<>();
-        map.put("picture\"; filename=\"" + file.getName() + "\"", mFile);
-        map.put("name", name);
-        map.put("price", price);
-        map.put("size", size);
-        map.put("stars", size);
-        map.put("count", count);
-        map.put("description", description);
-        Log.d("Tag", categoryId + " " + size + " " + price + " " + name);
-        productViewModel.updateProduct(product.getCategoryId(), map);
+        map.put("productPicture\"; filename=\"" + file.getName() + "\"", mFile);
+        map.put("productName", name);
+        map.put("productPrice", price);
+        map.put("productDescription", description);
+        map.put("productStars", size);
+        map.put("productItemsCount", count);
+        map.put("productSize", size);
+
+        Log.d("Tag",  product.getId()+ " " + size + " " + price + " " + name);
+        productViewModel.updateProduct(product.getId(), map);
         Global.hideKeyboard(getActivity());
         getActivity().onBackPressed();
     }
@@ -311,7 +312,7 @@ public class AddProductFragment extends Fragment implements View.OnClickListener
             return;
         nameEt.setText(product.getName());
         priceEt.setText(String.valueOf(product.getPrice()));
-        sizeEt.setText(String.valueOf(product.getSize()));
+        sizeEt.setText(String.valueOf(product.getStars()));
         countEt.setText(String.valueOf(product.getCount()));
         descriptionEt.setText(product.getDescription());
         String path = BASE_URL + "/" + product.getPicture();

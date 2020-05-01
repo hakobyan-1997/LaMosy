@@ -9,19 +9,23 @@ import javax.inject.Inject
 
 
 class ProductViewModel @Inject constructor(private val productRepository: ProductRepository) : ViewModel() {
-    fun addProduct(categoryId: String, map: Map<String, RequestBody>) {
-        productRepository.addProduct(categoryId, map)
+    fun addProduct(id: String, map: Map<String, RequestBody>) {
+        productRepository.addProduct(id, map)
     }
 
     fun deleteProduct(product: Product) {
         productRepository.deleteProduct(product)
     }
 
-    fun updateProduct(categoryId: String, map: Map<String, RequestBody>) {
-        productRepository.updateProduct(categoryId, map)
+    fun updateProduct(id: String, map: Map<String, RequestBody>) {
+        productRepository.updateProduct(id, map)
     }
 
     fun allProductsListByCategoryId(id:String) : LiveData<List<Product>>{
         return productRepository.getAllProductsByCategoryId(id)
+    }
+
+    fun searchProduct(criteria :String): LiveData<List<Product>>{
+        return productRepository.getSearchableList(criteria)
     }
 }

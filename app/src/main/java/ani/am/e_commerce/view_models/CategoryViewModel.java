@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import ani.am.e_commerce.db.entity.Category;
-import ani.am.e_commerce.db.entity.Product;
 import ani.am.e_commerce.repositories.CategoryRepository;
 import okhttp3.RequestBody;
 
@@ -42,5 +41,9 @@ public class CategoryViewModel extends ViewModel {
 
     public void updateCategory(String id, Map<String, RequestBody> map) {
         categoryListRepo.updateCategory(id, map);
+    }
+
+    public LiveData<List<Category>> searchCategory(String criteria){
+        return categoryListRepo.searchableList(criteria);
     }
 }

@@ -43,18 +43,21 @@ import ani.am.e_commerce.Global;
 import ani.am.e_commerce.R;
 
 import ani.am.e_commerce.adapters.UserCategoryAdapter;
+import ani.am.e_commerce.adapters.UserProductAdapter;
 import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.db.entity.Product;
+import ani.am.e_commerce.interfaces.CustomOnClickListener;
 import ani.am.e_commerce.view_models.CategoryViewModel;
+import ani.am.e_commerce.view_models.ProductViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dagger.android.support.AndroidSupportInjection;
 
+import static ani.am.e_commerce.Constants.REQ_CODE_SPEECH_INPUT;
 import static ani.am.e_commerce.activities.MainActivity.prefConfig;
 
-public class AllCategoriesFragment extends Fragment implements RecognitionListener {
+public class AllCategoriesFragment extends Fragment implements RecognitionListener, CustomOnClickListener {
     private View view;
-    private static final int REQ_CODE_SPEECH_INPUT = 100;
     private SearchView searchView;
     private TextView errorTv;
     private ImageButton mSpeakBtn;
@@ -64,17 +67,27 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     private ProgressBar progressBar;
     private boolean isAnimated;
     private List<Category> categoryList;
+    private List<Product> productList;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     @BindView(R.id.category_rv)
-    RecyclerView rv;
-
+    RecyclerView categoryRv;
+    @BindView(R.id.products_rv)
+    RecyclerView productRv;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         this.context = context;
+    }
+
+    public static AllCategoriesFragment newInstance(String href){
+        AllCategoriesFragment fragment = new AllCategoriesFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("href",href);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
    /* @Override
@@ -94,6 +107,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
 
     private void configureViewModel() {
         isAnimated = false;
+        Global.productViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
         Global.categoryViewModel = ViewModelProviders.of(this, viewModelFactory).get(CategoryViewModel.class);
         Global.categoryViewModel.getCategoriesList().observe(this, categories -> updateUI(categories));
     }
@@ -135,7 +149,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
                 Log.d("Tag", "Search : " + s);
                 Global.hideKeyboard(getActivity());
                 if (!s.isEmpty())
-                    searchCategoryByName(s);
+                    searchByName(s);
                 else
                     createArrayList(categoryList);
                 return false;
@@ -144,7 +158,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
             @Override
             public boolean onQueryTextChange(String s) {
                 if (!s.isEmpty())
-                    searchCategoryByName(s);
+                    searchByName(s);
                 else
                     createArrayList(categoryList);
                 return false;
@@ -155,11 +169,15 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         ImageView loginBtn = view.findViewById(R.id.login_btn);
         if (prefConfig.readLoginStatus()) {
             loginBtn.setVisibility(View.GONE);
-        }else{
+        } else {
             loginBtn.setVisibility(View.VISIBLE);
             loginBtn.setOnClickListener(view1 -> {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LoginFragment()).addToBackStack(null).commit();
             });
+            String href = getArguments().getString("href");
+            if(href != null && href.equals("login")){
+                loginBtn.performClick();
+            }
         }
     }
 
@@ -171,7 +189,7 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
         //recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "hy");
         //recognizerIntent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{"hy"});
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        // recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
 
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
 
@@ -194,36 +212,59 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     }
 
     private void createArrayList(List<Category> list) {
-        UserCategoryAdapter adapter = new UserCategoryAdapter(list,null, false);
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
-        if(!isAnimated) {
+        UserCategoryAdapter adapter = new UserCategoryAdapter(list, null, false);
+        categoryRv.setAdapter(adapter);
+        categoryRv.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
+        if (!isAnimated) {
             LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation);
-            rv.setLayoutAnimation(animation);
+            categoryRv.setLayoutAnimation(animation);
             isAnimated = true;
         }
     }
 
-    private void searchCategoryByName(String s) {
+    private void createSearchedList(List<Product> list) {
+        productList = list;
+        UserProductAdapter adapter = new UserProductAdapter(list, this, false);
+        productRv.setAdapter(adapter);
+        productRv.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation);
+        productRv.setLayoutAnimation(animation);
+
+    }
+
+    private void searchByName(String s) {
         translate(s);
-        List<Category> newList = new ArrayList<>();
-        String searchableString = s.toLowerCase();
-        String categoryName;
-        String productName;
-        for (Category category : categoryList) {
-            categoryName = category.getCategoryName().toLowerCase();
-            if (searchableString.contains(categoryName) || categoryName.contains(searchableString)) {
-                newList.add(category);
-            }/*else{
-                for (Product product : category.getProducts()){
+        Global.categoryViewModel.searchCategory(s).observe(this, categoryList -> {
+            Log.d("Tag", "categoryList " + categoryList);
+            List<Category> newList = new ArrayList<>();
+            String searchableString = s.toLowerCase();
+            String categoryName;
+            Log.d("Tag", "searchableString " + searchableString);
+            for (Category category : categoryList) {
+                categoryName = category.getCategoryName().toLowerCase();
+                if (searchableString.contains(categoryName) || categoryName.contains(searchableString)) {
+                    newList.add(category);
+                }
+            }
+            Log.d("Tag", "newList " + newList);
+            createArrayList(newList);
+        });
+
+        Global.productViewModel.searchProduct(s).observe(this, products -> {
+            Log.d("Tag", "productList " + products);
+            List<Product> newList = new ArrayList<>();
+            String searchableString = s.toLowerCase();
+            String productName;
+            Log.d("Tag", "searchableString " + searchableString);
+                for (Product product : products){
                     productName = product.getName().toLowerCase();
                     if (searchableString.contains(productName) || productName.contains(searchableString))
-                        newList.add(category);
-                }
-            }*/
-        }
-        Log.d("Tag", "newList " + newList);
-        createArrayList(newList);
+                        newList.add(product);
+
+            }
+            Log.d("Tag", "newList " + newList);
+            createSearchedList(newList);
+        });
     }
 
 
@@ -273,13 +314,6 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
     @Override
     public void onPartialResults(Bundle results) {
         Log.d("Tag", "onPartialResults ");
-        ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        String text = "";
-        for (String result : matches)
-            text += result + "\n";
-        searchView.onActionViewExpanded();
-        searchView.setQuery(text, true);
-        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -289,13 +323,10 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
 
     @Override
     public void onResults(Bundle results) {
-        Log.d("Tag", "onResults");
         ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-        String text = "";
-        for (String result : matches)
-            text += result + "\n";
+        Log.d("Tag", "onResults " + matches.get(0));
         searchView.onActionViewExpanded();
-        searchView.setQuery(text, true);
+        searchView.setQuery(matches.get(0), true);
         progressBar.setVisibility(View.INVISIBLE);
     }
 
@@ -340,5 +371,35 @@ public class AllCategoriesFragment extends Fragment implements RecognitionListen
                 break;
         }
         return message;
+    }
+
+    @Override
+    public void onClickListener(int position) {
+        Log.d("Tag","position "+ position);
+        if (productList == null)
+            return;
+        Product product = productList.get(position);
+        if (product == null)
+            return;
+        ProductFragment productFragment = ProductFragment.newInstance(product);
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, productFragment)
+                .addToBackStack(null)
+                .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.enter, R.anim.exit)
+                .commit();
+    }
+
+    @Override
+    public void editProduct(Product product) {
+
+    }
+
+    @Override
+    public void editCategory(int position) {
+
+    }
+
+    @Override
+    public void removeCategory(int position) {
+
     }
 }

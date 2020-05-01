@@ -2,6 +2,7 @@ package ani.am.e_commerce.di.module;
 
 import ani.am.e_commerce.activities.BaseActivity;
 import ani.am.e_commerce.activities.MainActivity;
+import ani.am.e_commerce.activities.OrderActivity;
 import ani.am.e_commerce.activities.UserProductsActivity;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -16,4 +17,7 @@ public abstract class ActivityModule {
 
     @ContributesAndroidInjector(modules = FragmentModule.class)
     abstract UserProductsActivity contributeUserProductsActivity();
+
+    @ContributesAndroidInjector
+    abstract OrderActivity contributeOrderActivity();
 }

@@ -38,7 +38,7 @@ public class OrdersFragment extends Fragment {
     private boolean isAnimated;
     private Context context;
     private List<Order> orderList;
-    private OrderViewModel orderViewModel;
+    public OrderViewModel orderViewModel;
     @Inject
     ViewModelProvider.Factory viewModelFactory;
     @BindView(R.id.orders_rv)
@@ -106,7 +106,7 @@ public class OrdersFragment extends Fragment {
     }
 
     private void createArrayList(List<Order> list) {
-        OrderAdapter adapter = new OrderAdapter(list,isSeller);
+        OrderAdapter adapter = new OrderAdapter(list,isSeller,this);
         ordersRv.setAdapter(adapter);
         ordersRv.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));
         if (!isAnimated) {

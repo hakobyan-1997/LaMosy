@@ -9,7 +9,6 @@ import android.arch.persistence.room.Update;
 
 import java.util.List;
 
-import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.db.entity.Product;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;

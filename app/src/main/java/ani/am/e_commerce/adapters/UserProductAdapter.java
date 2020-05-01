@@ -38,7 +38,7 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
     private ViewHolder viewHolder;
     private CustomOnClickListener customOnClickListener;
 
-    public UserProductAdapter(List<Product> list, CustomOnClickListener customOnClickListener,boolean isUser) {
+    public UserProductAdapter(List<Product> list, CustomOnClickListener customOnClickListener, boolean isUser) {
         this.productsList = list;
         this.isUser = isUser;
         this.customOnClickListener = customOnClickListener;
@@ -98,7 +98,6 @@ public class UserProductAdapter extends RecyclerView.Adapter<UserProductAdapter.
         viewHolder.price.setText((String.valueOf(product.getPrice())).concat("$"));
         viewHolder.contentLayout.setOnClickListener(v -> customOnClickListener.onClickListener(position));
         URL url = null;
-        Log.d("Tag", product.getPicture());
         if (product.getPicture() != " ") {
             String path = BASE_URL + "/" + product.getPicture();
             path = path.replace("\\", "/");

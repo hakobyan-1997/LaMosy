@@ -1,6 +1,8 @@
 package ani.am.e_commerce.repositories;
 
 import android.arch.lifecycle.LiveData;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -16,9 +18,13 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Singleton;
 
+import ani.am.e_commerce.R;
+import ani.am.e_commerce.activities.BaseActivity;
+import ani.am.e_commerce.activities.MainActivity;
 import ani.am.e_commerce.api.ApiInterface;
 import ani.am.e_commerce.db.dao.OrderDao;
 import ani.am.e_commerce.db.entity.Order;
+import ani.am.e_commerce.db.entity.OrderDetails;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,15 +43,18 @@ public class OrderRepository {
         this.executor = executor;
     }
 
-    public void createOrder(Order order) {
+    public void createOrder(Context context, OrderDetails orderDetailst) {
         String token = prefConfig.readToken("token");
+        Log.d("Tag", "order " + orderDetailst);
         executor.execute(() -> {
-            apiInterface.createOrder(token, order).enqueue(new Callback<JsonObject>() {
+            apiInterface.createOrder(token, orderDetailst).enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     Log.d("Tag", "createOrder " + response);
-                    if (response.isSuccessful() && response.body() != null)
-                        saveOrder(response.body().toString());
+                    if (response.isSuccessful() && response.body() != null) {
+                        prefConfig.displayToast(context.getString(R.string.successfully_ordered));
+                        context.startActivity(new Intent(context, BaseActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                    }
                 }
 
                 @Override
@@ -66,7 +75,7 @@ public class OrderRepository {
         return orderDao.getOrdersByBuyerId(buyerId);
     }
 
-    public void deleteOrder(Order order){
+    public void deleteOrder(Order order) {
         String token = prefConfig.readToken("token");
         executor.execute(() -> {
             apiInterface.deleteOrder(token, order.getOrderId()).enqueue(new Callback<JsonObject>() {
@@ -74,7 +83,8 @@ public class OrderRepository {
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                     Log.d("Tag", "deleteOrder " + response);
                     if (response.isSuccessful() && response.body() != null)
-                        orderDao.deleteOrder(order);
+                        executor.execute(() ->
+                                orderDao.deleteOrder(order));
                 }
 
                 @Override

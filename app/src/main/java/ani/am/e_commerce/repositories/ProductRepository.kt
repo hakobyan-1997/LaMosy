@@ -1,6 +1,7 @@
 package ani.am.e_commerce.repositories
 
 import android.arch.lifecycle.LiveData
+import android.location.Criteria
 import android.util.Log
 import ani.am.e_commerce.activities.MainActivity
 import ani.am.e_commerce.api.ApiInterface
@@ -9,7 +10,6 @@ import ani.am.e_commerce.db.entity.Product
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import okhttp3.RequestBody
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -28,8 +28,8 @@ class ProductRepository(
         val token = MainActivity.prefConfig.readToken("token")
         Log.d("Tag", "add product $id  token $token")
         executor.execute {
-            apiInterface.createProduct(id, token, map).enqueue(object : Callback<JsonObject?> {
-                override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+            apiInterface.createProduct(id, token, map).enqueue(object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     executor.execute {
                         Log.d("Tag", response.toString())
                         if (response.body() != null) {
@@ -39,7 +39,7 @@ class ProductRepository(
                     }
                 }
 
-                override fun onFailure(call: Call<JsonObject?>, t: Throwable) {}
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {}
             })
         }
     }
@@ -49,23 +49,23 @@ class ProductRepository(
         Log.d("Tag", "update product $id  token $token")
         Log.d("Tag", "update product $map")
         executor.execute {
-            apiInterface.updateProduct(token, id, map).enqueue(object : Callback<JsonObject?> {
-                override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+            apiInterface.updateProduct( id, token, map).enqueue(object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     Log.d("Tag", response.toString())
                     if (response.body() != null) {
                         Log.d("Tag", "updateProduct " + response.body().toString())
-                        // updateData(response.body().toString());
+                        updateData(response.body().toString());
                     }
                 }
 
-                override fun onFailure(call: Call<JsonObject?>, t: Throwable) {
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {
                     Log.d("Tag", "Fail updateProduct " + t.message)
                 }
             })
         }
     }
 
-    private fun saveData(json: String) {
+    fun saveData(json: String) {
         executor.execute {
             Log.d("Tag", "data json $json")
             try {
@@ -81,18 +81,60 @@ class ProductRepository(
         }
     }
 
+    fun updateData(json: String) {
+        executor.execute {
+            Log.d("Tag", "data json $json")
+            try {
+                val jsonObject = JSONObject(json)
+                val data = jsonObject.getJSONObject("data")
+                val gson = Gson()
+                val product = gson.fromJson(data.toString(), Product::class.java)
+                Log.d("Tag", "updated Product $product")
+                productDao.updateProduct(product)
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun deleteProduct(product: Product) {
         val token = MainActivity.prefConfig.readToken("token")
         executor.execute {
-            apiInterface.deleteProduct(token, product.id).enqueue(object : Callback<JsonObject?> {
-                override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+            apiInterface.deleteProduct(token, product.id).enqueue(object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     Log.d("Tag", "Product deleted from network !" + response.message())
+                    if (response.isSuccessful)
+                        executor.execute {
+                            productDao.deleteProduct(product)
+                        }
                 }
 
-                override fun onFailure(call: Call<JsonObject?>, t: Throwable) {}
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {}
             })
             productDao.deleteProduct(product)
         }
+    }
+
+    fun searchProduct(criteria: String){
+        executor.execute(){
+            apiInterface.searchProduct(criteria).enqueue(object :Callback<JsonObject>{
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                    Log.d("Tag", "Product searched!" + response.message())
+                    if (response.isSuccessful)
+                        executor.execute {
+                            saveProductsList(response.body().toString())
+                        }
+                }
+
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {}
+
+            })
+        }
+    }
+
+    fun getSearchableList (criteria: String):LiveData<List<Product>>{
+        searchProduct(criteria)
+        return productDao.allProducts
     }
 
     fun getAllProductsByCategoryId(id: String): LiveData<List<Product>> {
@@ -101,10 +143,10 @@ class ProductRepository(
     }
 
     fun refreshProductsListByCategoryId(categoryId: String) {
-        val token = MainActivity.prefConfig.readToken("token")
+        //val token = MainActivity.prefConfig.readToken("token")
         executor.execute {
-            apiInterface.getAllProductByCategoryId(categoryId, token).enqueue(object : Callback<JsonObject?> {
-                override fun onResponse(call: Call<JsonObject?>, response: Response<JsonObject?>) {
+            apiInterface.getAllProductByCategoryId(categoryId).enqueue(object : Callback<JsonObject> {
+                override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     Log.d("Tag", "refreshProductsListByCategoryId $response.toString()")
                     if (response.body() != null) {
                         Log.d("Tag", response.body().toString())
@@ -112,7 +154,7 @@ class ProductRepository(
                     }
                 }
 
-                override fun onFailure(call: Call<JsonObject?>, t: Throwable) {}
+                override fun onFailure(call: Call<JsonObject>, t: Throwable) {}
             })
         }
     }

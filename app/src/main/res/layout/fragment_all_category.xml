@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.AllCategoriesFragment">
 
     <!--<android.support.v7.widget.Toolbar
@@ -31,17 +31,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
             android:background="@null"
             android:scaleType="fitCenter"
-            android:layout_marginRight="12dp"
             android:src="@drawable/ic_mic" />
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
         <android.support.v7.widget.SearchView
             android:id="@+id/search_view"
@@ -53,30 +54,46 @@
             android:id="@+id/error_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="8dp"
-            android:textColor="@color/md_red_500"
             android:layout_below="@+id/search_view"
             android:textAlignment="center"
-            android:visibility="gone"/>
+            android:textColor="@color/md_red_500"
+            android:textSize="8dp"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_person"
-        android:layout_centerVertical="true"
+        android:layout_above="@+id/nestedScroll"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/marginRightSize"
         android:layout_marginEnd="@dimen/marginLeftSize"
-        android:layout_above="@+id/category_rv"
-        android:layout_alignParentTop="true"/>
+        android:src="@drawable/ic_person" />
 
-    <com.yayandroid.parallaxrecyclerview.ParallaxRecyclerView
-        android:id="@+id/category_rv"
-        android:layout_below="@+id/btnSpeakContainer"
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/md_light_blue_50" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSpeakContainer"
+        android:background="@color/md_light_blue_50">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.yayandroid.parallaxrecyclerview.ParallaxRecyclerView
+                android:id="@+id/category_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/products_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

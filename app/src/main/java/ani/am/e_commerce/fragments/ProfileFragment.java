@@ -97,7 +97,6 @@ public class ProfileFragment extends Fragment implements CustomOnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("Tag","onResume ProfileFragment ");
         getCategoryList();
         addCategoryButton.show();
     }
@@ -109,7 +108,6 @@ public class ProfileFragment extends Fragment implements CustomOnClickListener {
     }
 
     private void createArrayList(List<Category> list) {
-        Log.d("Tag", "userCategory " + list.toString());
         UserCategoryAdapter adapter = new UserCategoryAdapter(list,this,true);
         categoryRv.setAdapter(adapter);
         categoryRv.setLayoutManager(new LinearLayoutManager(context.getApplicationContext()));

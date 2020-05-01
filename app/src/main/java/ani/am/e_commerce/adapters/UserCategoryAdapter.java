@@ -124,7 +124,9 @@ public class UserCategoryAdapter extends ParallaxRecyclerView.Adapter<UserCatego
 
     @Override
     public int getItemCount() {
-        return categoriesList.size();
+        if (categoriesList != null)
+            return categoriesList.size();
+        return 0;
     }
 
     private void showDeleteDialog(final int position) {

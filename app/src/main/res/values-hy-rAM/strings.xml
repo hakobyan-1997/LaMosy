@@ -27,7 +27,11 @@
     <string name="my_shopping_history">Իմ գնումների պատմությունը</string>
     <string name="orders">Պատվերներ</string>
     <string name="order">Պատվեր</string>
+    <string name="successfully_ordered">Շնորհակալություն, պատվերը ընդունված է</string>
+    <string name="payment_cancel">Վճարման չեղարկում</string>
+    <string name="invalid_payment">Սխալ վճարում</string>
     <string name="settings">Կարգավորումներ</string>
+    <string name="search">Որոնել</string>
     <string name="addCategory">Ավելացնել բաժին</string>
     <string name="logout">Դուրս գալ</string>
 
@@ -50,7 +54,7 @@
     <string name="addProduct">Ավելացնել Ապրանք</string>
     <string name="product_name">Ապրանքի անվանումը</string>
     <string name="price">Գինը</string>
-    <string name="total">Ընդհանուր</string>
+    <string name="total">Ընդհանուր գումար</string>
     <string name="delivery_date">Առաքման ամսաթիվ</string>
     <string name="quantity">Քանակ</string>
     <string name="description">Նկարագրություն</string>

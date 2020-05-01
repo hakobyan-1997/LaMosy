@@ -31,9 +31,9 @@ import ani.am.e_commerce.Global;
 import ani.am.e_commerce.PrefConfig;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.adapters.UserProductAdapter;
+import ani.am.e_commerce.db.entity.Product;
 import ani.am.e_commerce.fragments.AddProductFragment;
 import ani.am.e_commerce.db.entity.Category;
-import ani.am.e_commerce.db.entity.Product;
 import ani.am.e_commerce.fragments.ProductFragment;
 import ani.am.e_commerce.interfaces.CustomOnClickListener;
 import ani.am.e_commerce.view_models.ProductViewModel;
@@ -222,6 +222,7 @@ public class UserProductsActivity extends AppCompatActivity implements HasSuppor
 
     @Override
     public void editProduct(Product product) {
+        hideFloatingActionButton(addProductButton);
         openEditFragment(product);
     }
 

@@ -125,8 +125,6 @@ public class BaseActivity extends AppCompatActivity implements UpdatePageInterfa
         prefConfig.writeToken("", "token");
         prefConfig.writeToken("", "id");
         startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
-        /*String token = prefConfig.readToken("token");
-        userViewModel.logout(this, token);*/
     }
 
     @Override

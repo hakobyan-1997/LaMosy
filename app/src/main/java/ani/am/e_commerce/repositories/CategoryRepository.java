@@ -20,7 +20,6 @@ import javax.inject.Singleton;
 import ani.am.e_commerce.api.ApiInterface;
 import ani.am.e_commerce.db.dao.CategoryDao;
 import ani.am.e_commerce.db.entity.Category;
-import ani.am.e_commerce.db.entity.Product;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -112,8 +111,33 @@ public class CategoryRepository {
                     categoryDao.deleteCategory(category);
                 }
         );
-
     }
+
+    private void searchCategory(String criteria) {
+        executor.execute(() -> {
+                    apiInterface.searchCategory(criteria).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            Log.d("Tag", "Category searched from network !" + response.message());
+                            if(response.isSuccessful()){
+                                saveData(response.body().toString());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                        }
+                    });
+                }
+        );
+    }
+
+    public LiveData<List<Category>> searchableList(String criteria){
+        searchCategory(criteria);
+        return categoryDao.getAllCategories();
+    }
+
 
     private void refreshCategories() {
         executor.execute(() ->

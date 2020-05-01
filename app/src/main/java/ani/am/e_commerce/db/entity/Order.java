@@ -52,21 +52,6 @@ public class Order {
 
     private String id;
 
-    public Order() {
-    }
-
-    public Order(String id, int productQuantity, String sellerId, String city, String country, String address, String region, String phone, String buyerName) {
-        this.id = id;
-        this.productQuantity = productQuantity;
-        this.sellerId = sellerId;
-        this.city = city;
-        this.country = country;
-        this.address = address;
-        this.region = region;
-        this.phone = phone;
-        this.buyerName = buyerName;
-    }
-
     @NonNull
     public String getOrderId() {
         return orderId;

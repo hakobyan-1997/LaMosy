@@ -11,97 +11,108 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true"
-        android:background="@color/light_gray"
         app:layout_collapseMode="pin"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_below="@+id/toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/total"
+        android:layout_below="@+id/toolbar">
 
-        <ImageView
-            android:id="@+id/product_image"
-            android:layout_width="250dp"
-            android:layout_height="250dp" />
-    </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginLeftSize"
+            android:layout_marginEnd="@dimen/marginRightSize"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_view"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="@dimen/marginLeftSize">
+
+                <ImageView
+                    android:id="@+id/product_image"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp" />
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/product_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/marginLeftSize"
+                android:fontFamily="@font/vast_shadow"
+                android:textSize="@dimen/bigTextSize" />
+
+            <LinearLayout
+                android:id="@+id/product_quantity_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/dec_iv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_dec"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/product_quantity"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/marginLeftSize"
+                    android:layout_marginEnd="@dimen/marginRightSize"
+                    android:text="1"
+                    android:textAlignment="center" />
+
+                <ImageView
+                    android:id="@+id/inc_iv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_add_box"
+                    android:tint="@color/colorPrimary" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
+        android:id="@+id/total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnBuy"
-        android:layout_below="@+id/product_quantity_layout"
-        android:layout_margin="@dimen/marginLeftSize"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <EditText
-            android:id="@+id/country"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/country" />
-
-        <EditText
-            android:id="@+id/city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/city" />
-
-        <EditText
-            android:id="@+id/region"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/region" />
-
-        <EditText
-            android:id="@+id/address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/address" />
-
-        <EditText
-            android:id="@+id/phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/phone" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/product_quantity_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/card_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/dec_iv"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_dec"
-            android:tint="@color/colorPrimary" />
+        android:orientation="horizontal"
+        android:padding="@dimen/marginTopSize"
+        android:weightSum="2">
 
         <TextView
-            android:id="@+id/product_quantity"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/marginLeftSize"
-            android:layout_marginEnd="@dimen/marginRightSize"
-            android:text="1"
+            android:layout_weight="1"
+            android:fontFamily="@font/wellfleet"
+            android:text="@string/total"
             android:textAlignment="center" />
 
-        <ImageView
-            android:id="@+id/inc_iv"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_add_box"
-            android:tint="@color/colorPrimary" />
-
+        <TextView
+            android:id="@+id/total_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/wellfleet"
+            android:text="50"
+            android:textAlignment="center"
+            android:textSize="@dimen/bigTextSize"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <Button

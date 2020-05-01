@@ -38,24 +38,12 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         } else {
             this.showFragment(savedInstanceState);
         }
-
-
     }
 
     @Override
     public void performRegister() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new RegistrationFragment()).addToBackStack(null).commit();
-    }
-
-
-    public void performLogin(String name, String token, String id) {
-        Log.d("Tag", " performLogin " + name + " " + token + " " + id);
-        prefConfig.writeName(name);
-        prefConfig.writeToken(token, "token");
-        prefConfig.writeToken(id, "id");
-       /* startActivity(new Intent(getApplicationContext(),BaseActivity.class));
-        finish();*/
     }
 
     @Override
@@ -69,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     private void showFragment(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-
-            AllCategoriesFragment fragment = new AllCategoriesFragment();
-
+            String href = getIntent().getStringExtra("href");
+            Log.d("Tag", "href 1= " + href);
+            AllCategoriesFragment fragment = AllCategoriesFragment.newInstance(href);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, fragment, null)
                     .commit();

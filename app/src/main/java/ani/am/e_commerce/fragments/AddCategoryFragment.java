@@ -124,7 +124,7 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
             path = path.replace("\\", "/");
             Glide.with(this).load(path)
                     .into(categoryImageView);
-            uri = Uri.parse(path);
+            uri = Uri.parse(category.getCategoryPicture());
         }
         Log.d("Tag", "Uri " + uri);
     }
@@ -186,8 +186,8 @@ public class AddCategoryFragment extends Fragment implements View.OnClickListene
         RequestBody name = RequestBody.create(MediaType.parse("text/plain"), categoryName.getText().toString());
         String id = category.getId();
         Map<String, RequestBody> map = new HashMap<>();
-        map.put("categoryPicture\"; filename=\"" + file.getName() + "\"", mFile);
-        map.put("categoryName", name);
+        map.put("productCategoryImage\"; filename=\"" + file.getName() + "\"", mFile);
+        map.put("productCategoryName", name);
         if (Global.categoryViewModel != null)
             Global.categoryViewModel.updateCategory(id, map);
         getActivity().onBackPressed();

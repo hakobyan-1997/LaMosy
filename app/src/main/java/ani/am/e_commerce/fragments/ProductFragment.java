@@ -17,11 +17,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import ani.am.e_commerce.R;
-import ani.am.e_commerce.activities.CardFormActivity;
+import ani.am.e_commerce.activities.MainActivity;
 import ani.am.e_commerce.activities.OrderActivity;
 import ani.am.e_commerce.db.entity.Product;
 
 import static ani.am.e_commerce.Constants.BASE_URL;
+import static ani.am.e_commerce.activities.MainActivity.prefConfig;
 
 public class ProductFragment extends Fragment {
     private View view;
@@ -81,9 +82,15 @@ public class ProductFragment extends Fragment {
 
         FloatingActionButton buy = view.findViewById(R.id.btnBuy);
         buy.setOnClickListener(view1 -> {
-            Intent intent = new Intent(context, OrderActivity.class);
-            intent.putExtra("product",product);
-            context.startActivity(intent);
+            if (prefConfig.readLoginStatus()) {
+                Intent intent = new Intent(context, OrderActivity.class);
+                intent.putExtra("product", product);
+                context.startActivity(intent);
+            }else{
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.putExtra("href", "login");
+                context.startActivity(intent);
+            }
         });
     }
 

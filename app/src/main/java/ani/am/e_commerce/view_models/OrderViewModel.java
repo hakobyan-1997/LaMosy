@@ -2,6 +2,9 @@ package ani.am.e_commerce.view_models;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +13,7 @@ import javax.inject.Inject;
 
 import ani.am.e_commerce.db.entity.Category;
 import ani.am.e_commerce.db.entity.Order;
+import ani.am.e_commerce.db.entity.OrderDetails;
 import ani.am.e_commerce.repositories.CategoryRepository;
 import ani.am.e_commerce.repositories.OrderRepository;
 import okhttp3.RequestBody;
@@ -34,7 +38,7 @@ public class OrderViewModel extends ViewModel {
         orderRepo.deleteOrder(order);
     }
 
-    public void createOrder(Order order) {
-        orderRepo.createOrder(order);
+    public void createOrder(Context context, OrderDetails orderDetails) {
+        orderRepo.createOrder(context,orderDetails);
     }
 }

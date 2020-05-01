@@ -17,17 +17,20 @@ import java.util.List;
 import ani.am.e_commerce.R;
 import ani.am.e_commerce.db.entity.Order;
 import ani.am.e_commerce.db.entity.Product;
+import ani.am.e_commerce.fragments.OrdersFragment;
 
 import static ani.am.e_commerce.Constants.BASE_URL;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
     private List<Order> ordersList;
+    private OrdersFragment ordersFragment;
     private boolean isSeller;
     private Context context;
 
-    public OrderAdapter(List<Order> ordersList, boolean isSeller) {
+    public OrderAdapter(List<Order> ordersList, boolean isSeller, OrdersFragment ordersFragment) {
         this.ordersList = ordersList;
         this.isSeller = isSeller;
+        this.ordersFragment = ordersFragment;
     }
 
     @NonNull
@@ -45,8 +48,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         viewHolder.productNameTv.setText(product.getName());
         viewHolder.quantityTv.setText(String.valueOf(order.getProductQuantity()));
         viewHolder.totalTv.setText(String.valueOf(order.getTotalPrice()));
-        String date = order.getDeliveryDate().replace("T"," ");
-        date = date.replace("Z","");
+        String date = order.getDeliveryDate().replace("T", " ");
+        date = date.replace("Z", "");
         viewHolder.deliveryDate.setText(date);
         if (product.getPicture() != " ") {
             String path = BASE_URL + "/" + product.getPicture();
@@ -54,6 +57,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             Glide.with(context).load(path)
                     .into(viewHolder.productIv);
         }
+        viewHolder.delete.setOnClickListener(view -> {
+            ordersFragment.orderViewModel.deleteOrder(order);
+            notifyDataSetChanged();
+        });
 
         if (isSeller) {
             viewHolder.adressLayout.setVisibility(View.VISIBLE);
@@ -79,6 +86,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         final TextView productNameTv;
         final ImageView productIv;
         final TextView deliveryDate;
+        final ImageView delete;
+
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +100,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             productNameTv = itemView.findViewById(R.id.product_name);
             productIv = itemView.findViewById(R.id.product_image);
             deliveryDate = itemView.findViewById(R.id.date);
+            delete = itemView.findViewById(R.id.delete);
         }
     }
 }
