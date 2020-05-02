@@ -46,7 +46,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         Order order = ordersList.get(position);
         Product product = order.getProduct();
         viewHolder.productNameTv.setText(product.getName());
-        viewHolder.quantityTv.setText(String.valueOf(order.getProductQuantity()));
+        viewHolder.quantityTv.setText(String.valueOf(order.getProductQuantity()).concat(" $"));
         viewHolder.totalTv.setText(String.valueOf(order.getTotalPrice()));
         String date = order.getDeliveryDate().replace("T", " ");
         date = date.replace("Z", "");

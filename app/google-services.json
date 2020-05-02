@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "585472232724",
+    "firebase_url": "https://lamosy.firebaseio.com",
+    "project_id": "lamosy",
+    "storage_bucket": "lamosy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585472232724:android:45b42c0e584b8160f28601",
+        "android_client_info": {
+          "package_name": "ani.am.e_commerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585472232724-2guppg9bde80g1vsd4551969kec4q9gg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ani.am.e_commerce",
+            "certificate_hash": "6fa66a95b9361c0b83ee6122594d974ef03eaff0"
+          }
+        },
+        {
+          "client_id": "585472232724-ambe2f4j3q173mf70f1mcihn34ufb2qp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-xhmNnwKgK8dPDuxwFzOmGjbmt3U3JgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585472232724-ambe2f4j3q173mf70f1mcihn34ufb2qp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
